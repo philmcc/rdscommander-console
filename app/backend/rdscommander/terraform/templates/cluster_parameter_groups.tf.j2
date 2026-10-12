@@ -1,0 +1,22 @@
+{% for group in cluster_parameter_groups %}
+resource "aws_rds_cluster_parameter_group" "{{ group.terraform_name }}" {
+  name        = {{ group.name | hcl }}
+  family      = {{ group.family | hcl }}
+  description = {{ group.description | hcl }}
+{% for parameter in group.parameters %}
+
+  parameter {
+    name         = {{ parameter.name | hcl }}
+    value        = {{ parameter.value | hcl }}
+    apply_method = {{ parameter.apply_method | hcl }}
+  }
+{% endfor %}
+{% if group.tags %}
+
+  tags = {{ group.tags | hcl }}
+{% endif %}
+}
+{% if not loop.last %}
+
+{% endif %}
+{% endfor %}

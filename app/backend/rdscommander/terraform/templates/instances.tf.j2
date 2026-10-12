@@ -1,0 +1,128 @@
+{% for instance in instances %}
+resource "aws_db_instance" "{{ instance.terraform_name }}" {
+  identifier     = {{ instance.identifier | hcl }}
+{% if instance.replicate_source_reference %}
+  replicate_source_db = {{ instance.replicate_source_reference }}
+{% if instance.storage_type %}
+  storage_type = {{ instance.storage_type | hcl }}
+{% endif %}
+{% if instance.iops %}
+  iops = {{ instance.iops }}
+{% endif %}
+  multi_az            = {{ instance.multi_az | hcl }}
+{% if instance.backup_retention_period is not none %}
+  backup_retention_period = {{ instance.backup_retention_period }}
+{% endif %}
+{% if instance.preferred_backup_window %}
+  backup_window           = {{ instance.preferred_backup_window | hcl }}
+{% endif %}
+{% else %}
+  engine         = {{ instance.engine | hcl }}
+  engine_version = {{ instance.engine_version | hcl }}
+{% if instance.master_username %}
+  username       = {{ instance.master_username | hcl }}
+{% endif %}
+{% if instance.db_name %}
+  db_name        = {{ instance.db_name | hcl }}
+{% endif %}
+{% if instance.allocated_storage is not none %}
+  allocated_storage = {{ instance.allocated_storage }}
+{% endif %}
+{% if instance.max_allocated_storage is not none %}
+  max_allocated_storage = {{ instance.max_allocated_storage }}
+{% endif %}
+{% if instance.storage_type %}
+  storage_type = {{ instance.storage_type | hcl }}
+{% endif %}
+{% if instance.iops %}
+  iops = {{ instance.iops }}
+{% endif %}
+{% if instance.storage_throughput %}
+  storage_throughput = {{ instance.storage_throughput }}
+{% endif %}
+{% if instance.port %}
+  port = {{ instance.port }}
+{% endif %}
+{% if instance.db_subnet_group_reference %}
+  db_subnet_group_name = {{ instance.db_subnet_group_reference }}
+{% endif %}
+  multi_az                = {{ instance.multi_az | hcl }}
+{% if instance.backup_retention_period is not none %}
+  backup_retention_period = {{ instance.backup_retention_period }}
+{% endif %}
+{% if instance.preferred_backup_window %}
+  backup_window           = {{ instance.preferred_backup_window | hcl }}
+{% endif %}
+  storage_encrypted       = {{ instance.storage_encrypted | hcl }}
+{% if instance.kms_key_id %}
+  kms_key_id              = {{ instance.kms_key_id | hcl }}
+{% endif %}
+{% if instance.snapshot_identifier %}
+  snapshot_identifier       = {{ instance.snapshot_identifier | hcl }}
+{% endif %}
+{% if instance.restore_to_point_in_time %}
+
+  restore_to_point_in_time {
+    source_db_instance_identifier = {{ instance.restore_to_point_in_time.source_identifier | hcl }}
+{% if instance.restore_to_point_in_time.use_latest_restorable_time %}
+    use_latest_restorable_time    = true
+{% else %}
+    restore_time                  = {{ instance.restore_to_point_in_time.restore_time_utc | hcl }}
+{% endif %}
+  }
+{% endif %}
+{% if instance.manage_master_user_password %}
+  manage_master_user_password = true
+{% endif %}
+{% endif %}
+  instance_class = {{ instance.instance_class | hcl }}
+{% if instance.vpc_security_group_ids %}
+  vpc_security_group_ids = {{ instance.vpc_security_group_ids | hcl }}
+{% endif %}
+{% if instance.parameter_group_reference %}
+  parameter_group_name = {{ instance.parameter_group_reference }}
+{% endif %}
+  publicly_accessible          = {{ instance.publicly_accessible | hcl }}
+{% if instance.preferred_maintenance_window %}
+  maintenance_window           = {{ instance.preferred_maintenance_window | hcl }}
+{% endif %}
+  deletion_protection          = {{ instance.deletion_protection | hcl }}
+  performance_insights_enabled = {{ instance.performance_insights_enabled | hcl }}
+{% if instance.performance_insights_enabled and instance.performance_insights_retention_period %}
+  performance_insights_retention_period = {{ instance.performance_insights_retention_period }}
+{% endif %}
+  monitoring_interval          = {{ instance.monitoring_interval }}
+{% if instance.monitoring_role_arn %}
+  monitoring_role_arn          = {{ instance.monitoring_role_arn | hcl }}
+{% endif %}
+  auto_minor_version_upgrade   = {{ instance.auto_minor_version_upgrade | hcl }}
+  copy_tags_to_snapshot        = {{ instance.copy_tags_to_snapshot | hcl }}
+{% if instance.ca_cert_identifier %}
+  ca_cert_identifier           = {{ instance.ca_cert_identifier | hcl }}
+{% endif %}
+  apply_immediately          = {{ instance.apply_immediately | hcl }}
+{% if instance.replicate_source_reference %}
+  skip_final_snapshot       = true
+{% else %}
+  skip_final_snapshot       = false
+  final_snapshot_identifier = {{ (instance.final_snapshot_identifier or (instance.identifier ~ "-final")) | hcl }}
+{% endif %}
+{% if instance.tags %}
+
+  tags = {{ instance.tags | hcl }}
+{% endif %}
+{% set ignored = [] %}
+{% if instance.auto_minor_version_upgrade %}{% set _ = ignored.append("engine_version") %}{% endif %}
+{% if instance.snapshot_identifier %}{% set _ = ignored.append("snapshot_identifier") %}{% endif %}
+{% if instance.restore_to_point_in_time %}{% set _ = ignored.append("restore_to_point_in_time") %}{% endif %}
+{% if ignored %}
+
+  lifecycle {
+    ignore_changes = [{{ ignored | join(", ") }}]
+  }
+{% endif %}
+}
+{% if not loop.last %}
+
+{% endif %}
+{% endfor %}

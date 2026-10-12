@@ -1,0 +1,14 @@
+version: 2
+
+# Everything below holds placeholder values, not credentials: fixtures for the local moto server, the
+# simulated account's fixed "testing" keys, and development-only database defaults. Real credentials
+# live in each operator's untracked .env and are never committed.
+secret:
+  ignored_paths:
+    - "app/backend/tests/**"
+    - "app/backend/rdscommander/aws/sessions.py"
+    - "app/backend/rdscommander/aws/profiles.py"
+    - "app/backend/rdscommander/simulated/seeder.py"
+    - "app/backend/rdscommander/terraform/runner.py"
+    - "app/backend/rdscommander/config/settings.py"
+    - "app/backend/alembic.ini"

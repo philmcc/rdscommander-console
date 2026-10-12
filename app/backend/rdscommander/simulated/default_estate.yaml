@@ -1,0 +1,49 @@
+# The demo estate seeded into the simulated AWS account. Override by placing a file with the same
+# shape at config/simulated_estate.yaml in this repository.
+vpc_cidr_block: 10.42.0.0/16
+subnet_cidr_blocks: [10.42.1.0/24, 10.42.2.0/24]
+security_groups:
+  - name: demo-db-access
+    description: PostgreSQL access from the demo VPC
+subnet_groups:
+  - name: demo-private-subnets
+    description: Private subnets for the demo estate
+instance_parameter_groups:
+  - name: demo-postgres16-tuned
+    family: postgres16
+    description: Tuned instance parameters for the demo estate
+    parameters:
+      - {name: log_min_duration_statement, value: "500", apply_method: immediate}
+      - {name: shared_buffers, value: "{DBInstanceClassMemory/32768}", apply_method: pending-reboot}
+      - {name: work_mem, value: "16384", apply_method: immediate}
+      - {name: rds.logical_replication, value: "1", apply_method: pending-reboot}
+cluster_parameter_groups:
+  - name: demo-aurora-pg16-tuned
+    family: aurora-postgresql16
+    description: Tuned cluster parameters for the demo estate
+    parameters:
+      - {name: log_min_duration_statement, value: "1000", apply_method: immediate}
+      - {name: rds.force_ssl, value: "1", apply_method: pending-reboot}
+      - {name: rds.logical_replication, value: "1", apply_method: pending-reboot}
+clusters:
+  - identifier: demo-aurora
+    engine_version: "16.4"
+    master_username: demo_admin
+    database_name: demo
+    cluster_parameter_group_name: demo-aurora-pg16-tuned
+    subnet_group_name: demo-private-subnets
+    instances:
+      - {identifier: demo-aurora-writer, instance_class: db.r6g.large, promotion_tier: 1}
+      - {identifier: demo-aurora-reader, instance_class: db.r6g.large, promotion_tier: 1}
+instances:
+  - identifier: demo-orders
+    engine_version: "16.4"
+    instance_class: db.m6g.large
+    allocated_storage: 100
+    master_username: demo_admin
+    parameter_group_name: demo-postgres16-tuned
+    subnet_group_name: demo-private-subnets
+    multi_az: true
+  - identifier: demo-orders-replica
+    read_replica_of: demo-orders
+    instance_class: db.m6g.large

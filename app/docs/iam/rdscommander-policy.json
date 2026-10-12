@@ -1,0 +1,128 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ConsoleReads",
+      "Effect": "Allow",
+      "Action": [
+        "rds:DescribeDBInstances",
+        "rds:DescribeDBClusters",
+        "rds:DescribeGlobalClusters",
+        "rds:DescribeDBParameterGroups",
+        "rds:DescribeDBParameters",
+        "rds:DescribeDBClusterParameterGroups",
+        "rds:DescribeDBClusterParameters",
+        "rds:DescribeDBSubnetGroups",
+        "rds:DescribeDBSnapshots",
+        "rds:DescribeDBClusterSnapshots",
+        "rds:DescribePendingMaintenanceActions",
+        "rds:DescribeEngineDefaultParameters",
+        "rds:DescribeEngineDefaultClusterParameters",
+        "rds:DescribeDBEngineVersions",
+        "rds:DescribeOrderableDBInstanceOptions",
+        "rds:DescribeBlueGreenDeployments",
+        "rds:ListTagsForResource",
+        "ec2:DescribeSubnets",
+        "ec2:DescribeVpcs",
+        "ec2:DescribeSecurityGroups",
+        "account:ListRegions",
+        "sts:GetCallerIdentity"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "ConsoleChanges",
+      "Effect": "Allow",
+      "Action": [
+        "rds:CreateBlueGreenDeployment",
+        "rds:SwitchoverBlueGreenDeployment",
+        "rds:DeleteBlueGreenDeployment",
+        "rds:PromoteReadReplicaDBCluster",
+        "rds:AddTagsToResource",
+        "rds:RemoveTagsFromResource",
+        "rds:ModifyDBInstance",
+        "rds:ModifyDBCluster",
+        "rds:ModifyDBSubnetGroup",
+        "rds:RebootDBInstance",
+        "rds:FailoverDBCluster",
+        "rds:ApplyPendingMaintenanceAction",
+        "rds:CreateDBSnapshot",
+        "rds:CreateDBClusterSnapshot",
+        "rds:DeleteDBSnapshot",
+        "rds:DeleteDBClusterSnapshot",
+        "rds:PromoteReadReplica",
+        "rds:DeleteDBInstance",
+        "rds:DeleteDBCluster",
+        "rds:CreateDBInstanceReadReplica",
+        "rds:CreateDBInstance",
+        "rds:CreateDBCluster",
+        "rds:RestoreDBInstanceFromDBSnapshot",
+        "rds:RestoreDBClusterFromSnapshot",
+        "rds:RestoreDBInstanceToPointInTime",
+        "rds:RestoreDBClusterToPointInTime",
+        "rds:CreateDBParameterGroup",
+        "rds:CreateDBClusterParameterGroup",
+        "rds:ModifyDBParameterGroup",
+        "rds:ModifyDBClusterParameterGroup",
+        "rds:ResetDBParameterGroup",
+        "rds:ResetDBClusterParameterGroup",
+        "rds:DeleteDBParameterGroup",
+        "rds:DeleteDBClusterParameterGroup"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "BlueGreenGreenSideEndpoints",
+      "Effect": "Allow",
+      "Action": ["rds:CreateDBClusterEndpoint"],
+      "Resource": "*"
+    },
+    {
+      "Sid": "ManagedMasterPasswords",
+      "Effect": "Allow",
+      "Action": ["secretsmanager:CreateSecret", "secretsmanager:TagResource"],
+      "Resource": "arn:aws:secretsmanager:*:*:secret:rds!*"
+    },
+    {
+      "Sid": "ManagedMasterPasswordKey",
+      "Effect": "Allow",
+      "Action": ["kms:DescribeKey"],
+      "Resource": "*"
+    },
+    {
+      "Sid": "EnhancedMonitoringRole",
+      "Effect": "Allow",
+      "Action": ["iam:PassRole"],
+      "Resource": "arn:aws:iam::*:role/*",
+      "Condition": {"StringEquals": {"iam:PassedToService": "monitoring.rds.amazonaws.com"}}
+    },
+    {
+      "Sid": "CustomerManagedKeyGrants",
+      "Effect": "Allow",
+      "Action": ["kms:CreateGrant"],
+      "Resource": "*",
+      "Condition": {
+        "StringLike": {"kms:ViaService": "rds.*.amazonaws.com"},
+        "Bool": {"kms:GrantIsForAWSResource": "true"}
+      }
+    },
+    {
+      "Sid": "TerraformStateBucket",
+      "Effect": "Allow",
+      "Action": [
+        "s3:CreateBucket",
+        "s3:ListBucket",
+        "s3:GetBucketVersioning",
+        "s3:PutBucketVersioning",
+        "s3:PutEncryptionConfiguration",
+        "s3:GetEncryptionConfiguration",
+        "s3:PutBucketPublicAccessBlock",
+        "s3:GetBucketPublicAccessBlock",
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:DeleteObject"
+      ],
+      "Resource": ["arn:aws:s3:::*-rdscommander-state-*", "arn:aws:s3:::*-rdscommander-state-*/*"]
+    }
+  ]
+}

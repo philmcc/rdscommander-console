@@ -1,0 +1,8 @@
+# Written by the console during an adoption and removed after the import is applied.
+{% for block in import_blocks %}
+
+import {
+  to = {{ block.to_address }}
+  id = {{ block.import_id | hcl }}
+}
+{% endfor %}

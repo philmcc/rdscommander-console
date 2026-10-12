@@ -1,0 +1,45 @@
+{
+  "format_version": "1.2",
+  "terraform_version": "1.10.0",
+  "resource_changes": [
+    {
+      "address": "aws_db_parameter_group.demo",
+      "type": "aws_db_parameter_group",
+      "name": "demo",
+      "change": {
+        "actions": ["no-op"],
+        "before": {"name": "demo", "family": "postgres16"},
+        "after": {"name": "demo", "family": "postgres16"},
+        "before_sensitive": {},
+        "after_sensitive": {},
+        "importing": {"id": "demo"}
+      }
+    },
+    {
+      "address": "aws_db_instance.orders",
+      "type": "aws_db_instance",
+      "name": "orders",
+      "change": {
+        "actions": ["update"],
+        "before": {"identifier": "orders", "password": "hunter2", "tags_all": {}},
+        "after": {"identifier": "orders", "password": "hunter2", "tags_all": {"rdscommander:managed": "true"}},
+        "before_sensitive": {"password": true},
+        "after_sensitive": {"password": true},
+        "importing": {"id": "orders"}
+      }
+    },
+    {
+      "address": "aws_rds_cluster.legacy",
+      "type": "aws_rds_cluster",
+      "name": "legacy",
+      "change": {
+        "actions": ["delete", "create"],
+        "before": {"cluster_identifier": "legacy"},
+        "after": {"cluster_identifier": "legacy"},
+        "before_sensitive": {},
+        "after_sensitive": {}
+      }
+    }
+  ],
+  "planned_values": {"root_module": {"resources": [{"address": "aws_db_instance.orders", "values": {"password": "hunter2", "identifier": "orders"}, "sensitive_values": {"password": true}}]}}
+}

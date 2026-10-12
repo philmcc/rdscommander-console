@@ -1,0 +1,33 @@
+name: ci
+on:
+  push:
+  pull_request:
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    services:
+      simulated-aws:
+        image: motoserver/moto:5.2.3
+        ports:
+          - 5000:5000
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_version: 1.13.1
+      - run: cd app/backend && uv sync && uv run ruff check . && uv run ruff format --check . && uv run pytest -q
+      - run: cd app/backend && RDSC_INTEGRATION=1 RDSC_SIMULATED_AWS_ENDPOINT_URL=http://127.0.0.1:5000 uv run pytest -m integration -q
+      - run: cd app/backend && uv run python -m rdscommander.export_openapi /tmp/openapi.json && diff -q /tmp/openapi.json ../contracts/openapi.json
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: cd app/frontend && bun install --frozen-lockfile && bun run generate:api && bun run lint && bun run typecheck && bun run test && bun run build
+  runtime:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: app/bin/test_console.sh
+      - run: cd app && docker build -f backend/Dockerfile -t rdscommander-console:ci .

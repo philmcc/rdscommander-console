@@ -1,0 +1,28 @@
+provider "aws" {
+  region = {{ aws_region | hcl }}
+{% if simulated %}
+  access_key                  = "testing"
+  secret_key                  = "testing"
+  skip_credentials_validation = true
+  skip_requesting_account_id  = true
+  skip_metadata_api_check     = true
+  skip_region_validation      = true
+  s3_use_path_style           = true
+
+  endpoints {
+    ec2 = {{ simulated_endpoint_url | hcl }}
+    rds = {{ simulated_endpoint_url | hcl }}
+    s3  = {{ simulated_endpoint_url | hcl }}
+    sts = {{ simulated_endpoint_url | hcl }}
+  }
+{% else %}
+  profile = {{ aws_profile_name | hcl }}
+{% endif %}
+
+  default_tags {
+    tags = {
+      "rdscommander:company" = {{ company_slug | hcl }}
+      "rdscommander:managed" = "true"
+    }
+  }
+}

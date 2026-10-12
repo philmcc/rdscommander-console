@@ -1,0 +1,60 @@
+{
+  "family": "fixture15",
+  "engine": "postgres",
+  "parameters": [
+    {
+      "ParameterName": "work_mem",
+      "ParameterValue": "4096",
+      "Description": "Sets the maximum memory to be used for query workspaces.",
+      "DataType": "integer",
+      "AllowedValues": "64-2147483647",
+      "IsModifiable": true,
+      "ApplyType": "dynamic"
+    },
+    {
+      "ParameterName": "log_statement",
+      "ParameterValue": "none",
+      "Description": "Sets the type of statements logged.",
+      "DataType": "string",
+      "AllowedValues": "none,ddl,mod,all",
+      "IsModifiable": true,
+      "ApplyType": "dynamic"
+    },
+    {
+      "ParameterName": "old_param",
+      "ParameterValue": "0",
+      "Description": "A parameter that the next family drops.",
+      "DataType": "boolean",
+      "AllowedValues": "0,1",
+      "IsModifiable": true,
+      "ApplyType": "dynamic"
+    },
+    {
+      "ParameterName": "force_parallel_mode",
+      "ParameterValue": "off",
+      "Description": "Forces the planner's use of parallel query facilities.",
+      "DataType": "string",
+      "AllowedValues": "off,on,regress",
+      "IsModifiable": true,
+      "ApplyType": "dynamic"
+    },
+    {
+      "ParameterName": "wal_compression",
+      "ParameterValue": "off",
+      "Description": "Compresses full-page writes written in WAL file.",
+      "DataType": "string",
+      "AllowedValues": "on,off",
+      "IsModifiable": true,
+      "ApplyType": "dynamic"
+    },
+    {
+      "ParameterName": "shared_buffers",
+      "ParameterValue": "{DBInstanceClassMemory/32768}",
+      "Description": "Sets the number of shared memory buffers used by the server.",
+      "DataType": "integer",
+      "AllowedValues": "16-1073741823",
+      "IsModifiable": true,
+      "ApplyType": "static"
+    }
+  ]
+}

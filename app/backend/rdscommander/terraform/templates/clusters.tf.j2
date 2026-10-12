@@ -1,0 +1,126 @@
+{% for cluster in clusters %}
+resource "aws_rds_cluster" "{{ cluster.terraform_name }}" {
+  cluster_identifier = {{ cluster.identifier | hcl }}
+  engine             = {{ cluster.engine | hcl }}
+  engine_version     = {{ cluster.engine_version | hcl }}
+{% if cluster.engine_mode %}
+  engine_mode        = {{ cluster.engine_mode | hcl }}
+{% endif %}
+  master_username    = {{ cluster.master_username | hcl }}
+{% if cluster.database_name %}
+  database_name      = {{ cluster.database_name | hcl }}
+{% endif %}
+{% if cluster.port %}
+  port               = {{ cluster.port }}
+{% endif %}
+{% if cluster.db_subnet_group_reference %}
+  db_subnet_group_name            = {{ cluster.db_subnet_group_reference }}
+{% endif %}
+{% if cluster.vpc_security_group_ids %}
+  vpc_security_group_ids          = {{ cluster.vpc_security_group_ids | hcl }}
+{% endif %}
+{% if cluster.cluster_parameter_group_reference %}
+  db_cluster_parameter_group_name = {{ cluster.cluster_parameter_group_reference }}
+{% endif %}
+{% if cluster.backup_retention_period is not none %}
+  backup_retention_period      = {{ cluster.backup_retention_period }}
+{% endif %}
+{% if cluster.preferred_backup_window %}
+  preferred_backup_window      = {{ cluster.preferred_backup_window | hcl }}
+{% endif %}
+{% if cluster.preferred_maintenance_window %}
+  preferred_maintenance_window = {{ cluster.preferred_maintenance_window | hcl }}
+{% endif %}
+  storage_encrypted            = {{ cluster.storage_encrypted | hcl }}
+{% if cluster.kms_key_id %}
+  kms_key_id                   = {{ cluster.kms_key_id | hcl }}
+{% endif %}
+{% if cluster.snapshot_identifier %}
+  snapshot_identifier          = {{ cluster.snapshot_identifier | hcl }}
+{% endif %}
+{% if cluster.restore_to_point_in_time %}
+
+  restore_to_point_in_time {
+    source_cluster_identifier  = {{ cluster.restore_to_point_in_time.source_identifier | hcl }}
+{% if cluster.restore_to_point_in_time.use_latest_restorable_time %}
+    use_latest_restorable_time = true
+{% else %}
+    restore_to_time            = {{ cluster.restore_to_point_in_time.restore_time_utc | hcl }}
+{% endif %}
+  }
+{% endif %}
+{% if cluster.manage_master_user_password %}
+  manage_master_user_password  = true
+{% endif %}
+  deletion_protection          = {{ cluster.deletion_protection | hcl }}
+  copy_tags_to_snapshot        = {{ cluster.copy_tags_to_snapshot | hcl }}
+  apply_immediately            = {{ cluster.apply_immediately | hcl }}
+  skip_final_snapshot          = false
+  final_snapshot_identifier    = {{ (cluster.final_snapshot_identifier or (cluster.identifier ~ "-final")) | hcl }}
+{% if cluster.serverless_v2_min_capacity is not none %}
+
+  serverlessv2_scaling_configuration {
+    min_capacity = {{ cluster.serverless_v2_min_capacity }}
+    max_capacity = {{ cluster.serverless_v2_max_capacity }}
+  }
+{% endif %}
+{% if cluster.tags %}
+
+  tags = {{ cluster.tags | hcl }}
+{% endif %}
+{% set ignored = [] %}
+{% if cluster.auto_minor_version_upgrade %}{% set _ = ignored.append("engine_version") %}{% endif %}
+{% if cluster.snapshot_identifier %}{% set _ = ignored.append("snapshot_identifier") %}{% endif %}
+{% if cluster.restore_to_point_in_time %}{% set _ = ignored.append("restore_to_point_in_time") %}{% endif %}
+{% if ignored %}
+
+  lifecycle {
+    ignore_changes = [{{ ignored | join(", ") }}]
+  }
+{% endif %}
+}
+
+{% endfor %}
+{% for instance in cluster_instances %}
+resource "aws_rds_cluster_instance" "{{ instance.terraform_name }}" {
+  identifier         = {{ instance.identifier | hcl }}
+  cluster_identifier = {{ instance.cluster_reference }}
+  instance_class     = {{ instance.instance_class | hcl }}
+  engine             = {{ instance.engine | hcl }}
+  engine_version     = {{ instance.engine_version | hcl }}
+{% if instance.parameter_group_reference %}
+  db_parameter_group_name = {{ instance.parameter_group_reference }}
+{% endif %}
+  publicly_accessible          = {{ instance.publicly_accessible | hcl }}
+  auto_minor_version_upgrade   = {{ instance.auto_minor_version_upgrade | hcl }}
+  performance_insights_enabled = {{ instance.performance_insights_enabled | hcl }}
+{% if instance.performance_insights_enabled and instance.performance_insights_retention_period %}
+  performance_insights_retention_period = {{ instance.performance_insights_retention_period }}
+{% endif %}
+  monitoring_interval          = {{ instance.monitoring_interval }}
+{% if instance.monitoring_interval and instance.monitoring_role_arn %}
+  monitoring_role_arn          = {{ instance.monitoring_role_arn | hcl }}
+{% endif %}
+  promotion_tier               = {{ instance.promotion_tier }}
+{% if instance.preferred_maintenance_window %}
+  preferred_maintenance_window = {{ instance.preferred_maintenance_window | hcl }}
+{% endif %}
+  apply_immediately            = {{ instance.apply_immediately | hcl }}
+{% if instance.depends_on_member %}
+  depends_on                   = [{{ instance.depends_on_member }}]
+{% endif %}
+{% if instance.tags %}
+
+  tags = {{ instance.tags | hcl }}
+{% endif %}
+{% if instance.auto_minor_version_upgrade %}
+
+  lifecycle {
+    ignore_changes = [engine_version]
+  }
+{% endif %}
+}
+{% if not loop.last %}
+
+{% endif %}
+{% endfor %}

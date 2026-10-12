@@ -1,0 +1,10 @@
+.env
+app/backend/.venv/
+app/frontend/node_modules/
+app/frontend/dist/
+terraform/**/.terraform/
+terraform/**/*.tfplan
+terraform/**/.terraform.lock.hcl.tmp
+__pycache__/
+.pytest_cache/
+.ruff_cache/

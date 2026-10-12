@@ -1,0 +1,47 @@
+import type { components, paths } from "./generated";
+
+type Json<T> = T extends { content: { "application/json": infer U } } ? U : never;
+
+export type Bootstrap = Json<paths["/api/v1/bootstrap"]["get"]["responses"][200]>;
+export type EnvironmentSummary = components["schemas"]["EnvironmentSummary"];
+export type EnvironmentInventory = components["schemas"]["EnvironmentInventory"];
+export type TargetInventory = components["schemas"]["TargetInventory"];
+export type ParameterGroupParameters = components["schemas"]["ParameterGroupParameters"];
+export type OperationSummary = components["schemas"]["OperationSummary"];
+export type OperationProgress = components["schemas"]["OperationProgress"];
+export type OperationDetail = components["schemas"]["OperationDetail"];
+export type StepAttemptSummary = components["schemas"]["StepAttemptSummary"];
+export type ChangeSetEntry = components["schemas"]["ChangeSetEntry"];
+export type DiagnosticSummary = components["schemas"]["DiagnosticSummary"];
+export type OperationList = components["schemas"]["OperationList"];
+export type WorkspaceList = components["schemas"]["WorkspaceList"];
+export type PlanView = components["schemas"]["PlanView"];
+export type HistoryPage = components["schemas"]["HistoryPage"];
+export type ExecutionRecordSummary = components["schemas"]["ExecutionRecordSummary"];
+export type OperationCreatedResponse = components["schemas"]["OperationCreatedResponse"];
+export type CatalogueResponse = components["schemas"]["CatalogueResponse"];
+export type DefinitionSummary = components["schemas"]["DefinitionSummary"];
+export type ResourcePage = components["schemas"]["ResourcePage"];
+export type ResourceList = components["schemas"]["ResourceList"];
+export type ResourceRecord = components["schemas"]["ResourceRecord"];
+export type DriftFindingView = components["schemas"]["DriftFindingView"];
+export type DriftAttribute = components["schemas"]["DriftAttribute"];
+export type PendingMaintenanceView = components["schemas"]["PendingMaintenanceView"];
+export type ActionAvailability = components["schemas"]["ActionAvailability"];
+export type AttentionInbox = components["schemas"]["AttentionInbox"];
+export type AttentionItem = components["schemas"]["AttentionItem"];
+export type ChangeEventPage = components["schemas"]["ChangeEventPage"];
+export type ChangeEventSummary = components["schemas"]["ChangeEventSummary"];
+export type EnvironmentList = components["schemas"]["EnvironmentList"];
+export type EnvironmentOverview = components["schemas"]["EnvironmentOverview"];
+/** `EnvironmentPage` schema; the `Data` suffix avoids clashing with the page component of the same name. */
+export type EnvironmentPageData = components["schemas"]["EnvironmentPage"];
+export type EnvironmentComparison = components["schemas"]["EnvironmentComparison"];
+export type ProfileList = components["schemas"]["ProfileList"];
+export type FamilyMetadata = components["schemas"]["FamilyMetadata"];
+export type ParameterMetadata = components["schemas"]["ParameterMetadata"];
+export type ParameterComparison = components["schemas"]["ParameterComparison"];
+export type UpgradePreview = components["schemas"]["UpgradePreview"];
+export type UpgradeGroupPlan = components["schemas"]["UpgradeGroupPlan"];
+export type EngineVersionList = components["schemas"]["EngineVersionList"];
+export type OperationCreateRequest = components["schemas"]["OperationCreateRequest"];

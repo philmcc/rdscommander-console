@@ -1,0 +1,14 @@
+{% for group in subnet_groups %}
+resource "aws_db_subnet_group" "{{ group.terraform_name }}" {
+  name        = {{ group.name | hcl }}
+  description = {{ group.description | hcl }}
+  subnet_ids  = {{ group.subnet_ids | hcl }}
+{% if group.tags %}
+
+  tags = {{ group.tags | hcl }}
+{% endif %}
+}
+{% if not loop.last %}
+
+{% endif %}
+{% endfor %}

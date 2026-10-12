@@ -1,0 +1,21 @@
+environments:
+  - slug: sandbox
+    display_name: Sandbox (simulated)
+    requires_approval: true
+    # How the console makes changes in this environment:
+    #   terraform - render the Terraform files, plan, review the plan, apply it and commit (resources must
+    #               be adopted into Terraform before they can be changed)
+    #   direct    - call the AWS API after review, then write the Terraform files and console-record.json
+    #               as the record of what changed and commit them
+    change_management: terraform
+    # Resources owned by other tooling (CloudFormation, another Terraform state) stay read-only unless this
+    # is true; when it is, the review shows which tooling owns the resource.
+    allow_direct_changes_to_foreign_owned: false
+    # How often the scheduler refreshes this environment's inventory, in minutes (1 to 1440).
+    inventory_refresh_minutes: 15
+    # How often the scheduler compares the live estate with the record to detect drift, in hours (1 to 168).
+    drift_check_hours: 24
+    targets:
+      - aws_account_id: "000000000000"
+        aws_region: eu-west-2
+        simulated: true

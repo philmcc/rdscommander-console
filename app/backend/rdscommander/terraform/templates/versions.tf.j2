@@ -1,0 +1,10 @@
+terraform {
+  required_version = {{ required_version | hcl }}
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = {{ aws_provider_version | hcl }}
+    }
+  }
+}

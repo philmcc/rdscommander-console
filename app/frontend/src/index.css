@@ -1,0 +1,150 @@
+@import "tailwindcss";
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --paper: #fbfbf9;
+  --surface: #ffffff;
+  --ink: #15181c;
+  --muted: #5c6470;
+  --hairline: #e6e4df;
+  --accent: #1f5f8b;
+  --accent-ink: #ffffff;
+  --status-green: #1e8e5a;
+  --status-amber: #b7791f;
+  --status-red: #c13a2e;
+  --status-blue: #2a6fd6;
+  --env-hue-0: #1f5f8b;
+  --env-hue-1: #6b4fbb;
+  --env-hue-2: #0f766e;
+  --env-hue-3: #b45309;
+  --env-hue-4: #be185d;
+  --env-hue-5: #4d7c0f;
+  --env-hue-6: #0369a1;
+  --env-hue-7: #7c2d12;
+  --radius-small: 6px;
+  --radius-large: 10px;
+  --shadow-panel: 0 12px 32px rgb(21 24 28 / 0.18);
+  --motion: 150ms ease-out;
+  /* shadcn names, mapped onto the tokens so the primitives pick them up */
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
+  --muted-foreground: var(--muted);
+  --border: var(--hairline);
+  --input: var(--hairline);
+  --primary: var(--accent);
+  --primary-foreground: var(--accent-ink);
+  --secondary: color-mix(in srgb, var(--hairline) 55%, var(--surface));
+  --secondary-foreground: var(--ink);
+  --accent-foreground: var(--accent-ink);
+  --destructive: var(--status-red);
+  --ring: var(--accent);
+  --radius: var(--radius-small);
+}
+.dark {
+  --paper: #101214;
+  --surface: #171a1e;
+  --ink: #edeae4;
+  --muted: #9aa3ad;
+  --hairline: #262b31;
+  --accent: #6fb1e3;
+  --accent-ink: #101214;
+  --status-green: #4cc38a;
+  --status-amber: #f2b544;
+  --status-red: #f0665a;
+  --status-blue: #6ea8ff;
+  --shadow-panel: 0 12px 32px rgb(0 0 0 / 0.5);
+}
+@theme {
+  --breakpoint-nav: 900px; /* below this the sidebar becomes a sheet */
+}
+@theme inline {
+  --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --text-xs: 12px;
+  --text-sm: 13px;
+  --text-base: 14px;
+  --text-lg: 16px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+  --text-3xl: 32px;
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-hairline: var(--hairline);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-status-green: var(--status-green);
+  --color-status-amber: var(--status-amber);
+  --color-status-red: var(--status-red);
+  --color-status-blue: var(--status-blue);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-ring: var(--ring);
+  --radius-sm: var(--radius-small);
+  --radius-md: var(--radius-small);
+  --radius-lg: var(--radius-large);
+  --shadow-panel: var(--shadow-panel);
+}
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--border);
+  }
+}
+body {
+  @apply bg-paper text-ink font-sans text-sm antialiased;
+}
+code,
+kbd,
+.mono {
+  @apply font-mono text-sm;
+}
+* {
+  transition-duration: 150ms;
+  transition-timing-function: ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    /* biome-ignore lint/complexity/noImportantStyles: reduced motion must beat every component's own animation */
+    transition: none !important;
+    /* biome-ignore lint/complexity/noImportantStyles: reduced motion must beat every component's own animation */
+    animation: none !important;
+  }
+}
+.progress-strip::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 33%;
+  background: var(--status-blue);
+  animation: strip 1.2s linear infinite;
+}
+@keyframes strip {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(300%);
+  }
+}
