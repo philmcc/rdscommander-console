@@ -1,3 +1,0 @@
-required_opentofu_version: "~> 1.10"
-aws_provider_version: "~> 6.0"
-state_bucket_name_template: "{company_slug}-rdscommander-state-{aws_account_id}-{aws_region}"

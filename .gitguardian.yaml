@@ -5,10 +5,10 @@ version: 2
 # live in each operator's untracked .env and are never committed.
 secret:
   ignored_paths:
-    - "app/backend/tests/**"
-    - "app/backend/rdscommander/aws/sessions.py"
-    - "app/backend/rdscommander/aws/profiles.py"
-    - "app/backend/rdscommander/simulated/seeder.py"
-    - "app/backend/rdscommander/terraform/runner.py"
-    - "app/backend/rdscommander/config/settings.py"
-    - "app/backend/alembic.ini"
+    - "backend/tests/**"
+    - "backend/rdscommander/aws/sessions.py"
+    - "backend/rdscommander/aws/profiles.py"
+    - "backend/rdscommander/simulated/seeder.py"
+    - "backend/rdscommander/terraform/runner.py"
+    - "backend/rdscommander/config/settings.py"
+    - "backend/alembic.ini"

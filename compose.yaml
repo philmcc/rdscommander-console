@@ -1,0 +1,70 @@
+name: rdscommander
+
+services:
+  control-db:
+    image: postgres:17
+    profiles: ["bundled-db"]
+    environment:
+      POSTGRES_USER: rdscommander
+      # Generated into the operator's .env by `console up`; never committed.
+      POSTGRES_PASSWORD: ${RDSC_BUNDLED_DATABASE_PASSWORD:-}
+      POSTGRES_DB: rdscommander
+    volumes:
+      - control-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rdscommander"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  simulated-aws:
+    image: motoserver/moto:5.2.3
+    profiles: ["simulated-aws"]
+    environment:
+      MOTO_PORT: "5000"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:5000/moto-api/ > /dev/null || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    image: rdscommander-console:local
+    # A fixed hostname keeps the runner identity (hostname:operator) when the container is re-created, so
+    # an operation waiting for approval can still be approved or rejected after `console down` and `up`.
+    hostname: rdscommander-console
+    env_file:
+      - path: ${RDSC_ENV_FILE:-.env}
+        required: false
+    environment:
+      RDSC_CONTROL_DATABASE_URL: ${RDSC_CONTROL_DATABASE_URL:-postgresql+psycopg://rdscommander:${RDSC_BUNDLED_DATABASE_PASSWORD:-}@control-db:5432/rdscommander}
+      RDSC_CONFIG_DIR: /data/config
+      RDSC_REPO_ROOT: /data
+      RDSC_SIMULATED_AWS_ENDPOINT_URL: http://simulated-aws:5000
+      RDSC_HTTP_PORT: "8470"
+      SSH_AUTH_SOCK: /ssh-agent
+      GIT_TERMINAL_PROMPT: "0"
+    ports:
+      - "127.0.0.1:${RDSC_HTTP_PORT:-8470}:8470"
+    volumes:
+      - ${RDSC_HOME_DIR:-./home}:/data
+      - ${HOME}/.aws:/root/.aws:ro
+      # Git access to the repository's remote from inside the container: SSH keys and known hosts,
+      # the operator's git configuration, stored HTTPS credentials, and the SSH agent socket.
+      - ${HOME}/.ssh:/root/.ssh:ro
+      - ${RDSC_GIT_CONFIG_FILE:-${HOME}/.gitconfig}:/root/.gitconfig:ro
+      - ${RDSC_GIT_CREDENTIALS_FILE:-${HOME}/.git-credentials}:/root/.git-credentials:ro
+      - ${RDSC_SSH_AUTH_SOCK:-/dev/null}:/ssh-agent
+    depends_on:
+      control-db:
+        condition: service_healthy
+        required: false
+      simulated-aws:
+        condition: service_healthy
+        required: false
+
+volumes:
+  control-db-data:

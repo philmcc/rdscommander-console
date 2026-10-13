@@ -1,0 +1,5484 @@
+{
+  "components": {
+    "schemas": {
+      "ActionAvailability": {
+        "description": "What the Actions menu and launcher show.\n\nAttributes:\n    kind: Operation kind.\n    title: Human title of the operation.\n    group: Menu group the operation is listed under.\n    summary: One sentence describing what the operation does.\n    destructive: Whether the operation destroys data or resources.\n    disruptive: Whether the operation interrupts running databases.\n    applicable: Whether the operation can run now.\n    reason: Why it cannot run; empty when `applicable` is True.",
+        "properties": {
+          "applicable": {
+            "title": "Applicable",
+            "type": "boolean"
+          },
+          "destructive": {
+            "title": "Destructive",
+            "type": "boolean"
+          },
+          "disruptive": {
+            "title": "Disruptive",
+            "type": "boolean"
+          },
+          "group": {
+            "title": "Group",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "reason": {
+            "default": "",
+            "title": "Reason",
+            "type": "string"
+          },
+          "summary": {
+            "title": "Summary",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "title",
+          "group",
+          "summary",
+          "destructive",
+          "disruptive",
+          "applicable"
+        ],
+        "title": "ActionAvailability",
+        "type": "object"
+      },
+      "AdoptionProblems": {
+        "description": "422 body when the selection cannot be adopted.",
+        "properties": {
+          "detail": {
+            "title": "Detail",
+            "type": "string"
+          },
+          "problems": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Problems",
+            "type": "array"
+          }
+        },
+        "required": [
+          "detail",
+          "problems"
+        ],
+        "title": "AdoptionProblems",
+        "type": "object"
+      },
+      "AdoptionSummary": {
+        "description": "Adopted resource row.",
+        "properties": {
+          "adopted_at_utc": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Adopted At Utc"
+          },
+          "adoption_status": {
+            "title": "Adoption Status",
+            "type": "string"
+          },
+          "resource_arn": {
+            "title": "Resource Arn",
+            "type": "string"
+          },
+          "resource_identifier": {
+            "title": "Resource Identifier",
+            "type": "string"
+          },
+          "resource_type": {
+            "title": "Resource Type",
+            "type": "string"
+          },
+          "terraform_address": {
+            "title": "Terraform Address",
+            "type": "string"
+          }
+        },
+        "required": [
+          "resource_arn",
+          "resource_identifier",
+          "resource_type",
+          "terraform_address",
+          "adoption_status",
+          "adopted_at_utc"
+        ],
+        "title": "AdoptionSummary",
+        "type": "object"
+      },
+      "ApprovalRequest": {
+        "description": "What the approver saw and typed; the server checks both against what the operation waits for.\n\nAttributes:\n    approval_stage: The stage of the review the approver read (`plan[\"approval_stage\"]`, for example a\n        major upgrade's `create_green` or `switchover`); required when the operation's plan names one.\n    confirmation_text: What the approver typed; required, exactly, when the operation has an\n        `approval_required_text`.\n\nExample:\n    >>> ApprovalRequest(approval_stage=\"switchover\", confirmation_text=\"demo-orders\").approval_stage\n    'switchover'",
+        "properties": {
+          "approval_stage": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Approval Stage"
+          },
+          "confirmation_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confirmation Text"
+          }
+        },
+        "title": "ApprovalRequest",
+        "type": "object"
+      },
+      "AttentionInbox": {
+        "description": "All sections of the inbox, each a list of rows (empty when nothing needs attention).",
+        "properties": {
+          "awaiting_approval": {
+            "items": {
+              "$ref": "#/components/schemas/AttentionItem"
+            },
+            "title": "Awaiting Approval",
+            "type": "array"
+          },
+          "blue_side": {
+            "items": {
+              "$ref": "#/components/schemas/AttentionItem"
+            },
+            "title": "Blue Side",
+            "type": "array"
+          },
+          "drift": {
+            "items": {
+              "$ref": "#/components/schemas/AttentionItem"
+            },
+            "title": "Drift",
+            "type": "array"
+          },
+          "failed_recent": {
+            "items": {
+              "$ref": "#/components/schemas/AttentionItem"
+            },
+            "title": "Failed Recent",
+            "type": "array"
+          },
+          "foreign_owned": {
+            "items": {
+              "$ref": "#/components/schemas/AttentionItem"
+            },
+            "title": "Foreign Owned",
+            "type": "array"
+          },
+          "outside_changes": {
+            "items": {
+              "$ref": "#/components/schemas/AttentionItem"
+            },
+            "title": "Outside Changes",
+            "type": "array"
+          },
+          "pending_maintenance": {
+            "items": {
+              "$ref": "#/components/schemas/AttentionItem"
+            },
+            "title": "Pending Maintenance",
+            "type": "array"
+          },
+          "pending_reboot": {
+            "items": {
+              "$ref": "#/components/schemas/AttentionItem"
+            },
+            "title": "Pending Reboot",
+            "type": "array"
+          },
+          "unmanaged": {
+            "items": {
+              "$ref": "#/components/schemas/AttentionItem"
+            },
+            "title": "Unmanaged",
+            "type": "array"
+          }
+        },
+        "required": [
+          "awaiting_approval",
+          "pending_reboot",
+          "pending_maintenance",
+          "drift",
+          "outside_changes",
+          "failed_recent",
+          "foreign_owned",
+          "unmanaged",
+          "blue_side"
+        ],
+        "title": "AttentionInbox",
+        "type": "object"
+      },
+      "AttentionItem": {
+        "description": "One inbox row with the action that resolves it.\n\nAttributes:\n    kind: The inbox section the row belongs to, e.g. `drift`.\n    title: One line saying what needs attention.\n    detail: A second line with the particulars.\n    environment_slug: Environment the row belongs to; empty for a failed operation that belongs to no\n        environment (an environment import), which every environment's inbox lists.\n    resource_id: URL-safe id of the resource, when the row is about one.\n    resource_identifier: The resource's AWS identifier, when the row is about one.\n    operation_id: The operation the row is about, when it is about one.\n    action_kind: Catalogue operation kind that resolves the row, when one does.\n    action_options: Options to prefill for `action_kind`.",
+        "properties": {
+          "action_kind": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Action Kind"
+          },
+          "action_options": {
+            "additionalProperties": true,
+            "title": "Action Options",
+            "type": "object"
+          },
+          "detail": {
+            "title": "Detail",
+            "type": "string"
+          },
+          "environment_slug": {
+            "title": "Environment Slug",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "operation_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Operation Id"
+          },
+          "resource_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resource Id"
+          },
+          "resource_identifier": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resource Identifier"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "title",
+          "detail",
+          "environment_slug"
+        ],
+        "title": "AttentionItem",
+        "type": "object"
+      },
+      "AttributeDifference": {
+        "description": "One attribute whose value differs between the two environments.\n\nAttributes:\n    attribute: Attribute name, e.g. `db_instance_class` or `parameter.work_mem`.\n    left: Value in the left environment; None when absent there.\n    right: Value in the right environment; None when absent there.",
+        "properties": {
+          "attribute": {
+            "title": "Attribute",
+            "type": "string"
+          },
+          "left": {
+            "title": "Left"
+          },
+          "right": {
+            "title": "Right"
+          }
+        },
+        "required": [
+          "attribute",
+          "left",
+          "right"
+        ],
+        "title": "AttributeDifference",
+        "type": "object"
+      },
+      "BootstrapResponse": {
+        "description": "Identity and configuration summary.\n\nAttributes:\n    csrf_token: Token the browser sends with every change.\n    operator_name: Who the console acts as.\n    theme_default: The theme the shell starts in before the operator picks one.\n    console_version: The running console version.\n    environments: Every configured environment.",
+        "properties": {
+          "console_version": {
+            "title": "Console Version",
+            "type": "string"
+          },
+          "csrf_token": {
+            "title": "Csrf Token",
+            "type": "string"
+          },
+          "environments": {
+            "items": {
+              "$ref": "#/components/schemas/EnvironmentSummary"
+            },
+            "title": "Environments",
+            "type": "array"
+          },
+          "operator_name": {
+            "title": "Operator Name",
+            "type": "string"
+          },
+          "theme_default": {
+            "enum": [
+              "system",
+              "light",
+              "dark"
+            ],
+            "title": "Theme Default",
+            "type": "string"
+          }
+        },
+        "required": [
+          "csrf_token",
+          "operator_name",
+          "theme_default",
+          "console_version",
+          "environments"
+        ],
+        "title": "BootstrapResponse",
+        "type": "object"
+      },
+      "CatalogueResponse": {
+        "description": "All definitions.",
+        "properties": {
+          "definitions": {
+            "items": {
+              "$ref": "#/components/schemas/DefinitionSummary"
+            },
+            "title": "Definitions",
+            "type": "array"
+          }
+        },
+        "required": [
+          "definitions"
+        ],
+        "title": "CatalogueResponse",
+        "type": "object"
+      },
+      "ChangeEventPage": {
+        "description": "Changes view.",
+        "properties": {
+          "events": {
+            "items": {
+              "$ref": "#/components/schemas/ChangeEventSummary"
+            },
+            "title": "Events",
+            "type": "array"
+          }
+        },
+        "required": [
+          "events"
+        ],
+        "title": "ChangeEventPage",
+        "type": "object"
+      },
+      "ChangeEventSummary": {
+        "description": "One change event: an attribute of a resource that differs between two inventory snapshots.\n\nAttributes:\n    id: Event id; newer events have larger ids.\n    resource_arn: ARN of the resource that changed.\n    resource_id: URL-safe id of the resource, as used by the resource routes.\n    environment_slug: Environment of the resource.\n    target_key: Target of the resource.\n    attribute_path: Attribute that changed, e.g. `db_instance_class` or `parameter.work_mem`;\n        `created` or `removed` when the resource itself appeared or vanished.\n    value_before: Value in the earlier snapshot, null when absent.\n    value_after: Value in the later snapshot, null when absent.\n    explanation: `operation` when a console operation accounts for the change, else `outside_console`.\n    operation_id: The explaining operation, when there is one.\n    detected_at_utc: When the console noticed the change.\n    reviewed_by_operator_name: Operator who reviewed the change, if anyone has.\n    reviewed_at_utc: When it was reviewed.",
+        "properties": {
+          "attribute_path": {
+            "title": "Attribute Path",
+            "type": "string"
+          },
+          "detected_at_utc": {
+            "format": "date-time",
+            "title": "Detected At Utc",
+            "type": "string"
+          },
+          "environment_slug": {
+            "title": "Environment Slug",
+            "type": "string"
+          },
+          "explanation": {
+            "title": "Explanation",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "operation_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Operation Id"
+          },
+          "resource_arn": {
+            "title": "Resource Arn",
+            "type": "string"
+          },
+          "resource_id": {
+            "title": "Resource Id",
+            "type": "string"
+          },
+          "reviewed_at_utc": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reviewed At Utc"
+          },
+          "reviewed_by_operator_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reviewed By Operator Name"
+          },
+          "target_key": {
+            "title": "Target Key",
+            "type": "string"
+          },
+          "value_after": {
+            "title": "Value After"
+          },
+          "value_before": {
+            "title": "Value Before"
+          }
+        },
+        "required": [
+          "id",
+          "resource_arn",
+          "resource_id",
+          "environment_slug",
+          "target_key",
+          "attribute_path",
+          "value_before",
+          "value_after",
+          "explanation",
+          "operation_id",
+          "detected_at_utc",
+          "reviewed_by_operator_name",
+          "reviewed_at_utc"
+        ],
+        "title": "ChangeEventSummary",
+        "type": "object"
+      },
+      "ChangeSetEntry": {
+        "description": "One attribute the operation will change.\n\nAttributes:\n    address: Terraform address of the resource.\n    attribute: Attribute path, e.g. `parameters.work_mem` or `instance_class`.\n    current: The value AWS has now.\n    desired: The value the operation will set.\n    apply_type: How AWS applies it: `immediate`, `pending-reboot` (at the next reboot) or `recreate`.\n    requires_reboot: Whether the change only takes effect after a reboot.\n    downtime: What the approver should expect, `none` when nothing is interrupted.",
+        "properties": {
+          "address": {
+            "title": "Address",
+            "type": "string"
+          },
+          "apply_type": {
+            "enum": [
+              "immediate",
+              "pending-reboot",
+              "pending-window",
+              "recreate"
+            ],
+            "title": "Apply Type",
+            "type": "string"
+          },
+          "attribute": {
+            "title": "Attribute",
+            "type": "string"
+          },
+          "current": {
+            "title": "Current"
+          },
+          "desired": {
+            "title": "Desired"
+          },
+          "downtime": {
+            "title": "Downtime",
+            "type": "string"
+          },
+          "requires_reboot": {
+            "title": "Requires Reboot",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "address",
+          "attribute",
+          "current",
+          "desired",
+          "apply_type",
+          "requires_reboot",
+          "downtime"
+        ],
+        "title": "ChangeSetEntry",
+        "type": "object"
+      },
+      "Classification": {
+        "description": "One override's fate in the target family.\n\nAttributes:\n    name: The parameter's name on the current group.\n    value: The value on the current group.\n    outcome: What happens to it in the target family.\n    new_name: The name in the target family when it differs from `name`.\n    note: Why the outcome is what it is; empty for a plain carry.\n    old_default: The parameter's default in the current family, when it had one.\n    new_default: The parameter's default in the target family, when it has one.",
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "new_default": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "New Default"
+          },
+          "new_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "New Name"
+          },
+          "note": {
+            "default": "",
+            "title": "Note",
+            "type": "string"
+          },
+          "old_default": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Old Default"
+          },
+          "outcome": {
+            "enum": [
+              "carried",
+              "default_changed",
+              "needs_review",
+              "removed",
+              "renamed"
+            ],
+            "title": "Outcome",
+            "type": "string"
+          },
+          "value": {
+            "title": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "value",
+          "outcome"
+        ],
+        "title": "Classification",
+        "type": "object"
+      },
+      "ClusterSummary": {
+        "description": "Cluster row.",
+        "properties": {
+          "cluster_parameter_group_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cluster Parameter Group Name"
+          },
+          "db_cluster_arn": {
+            "title": "Db Cluster Arn",
+            "type": "string"
+          },
+          "db_cluster_identifier": {
+            "title": "Db Cluster Identifier",
+            "type": "string"
+          },
+          "db_subnet_group_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Db Subnet Group Name"
+          },
+          "engine": {
+            "title": "Engine",
+            "type": "string"
+          },
+          "engine_version": {
+            "title": "Engine Version",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "member_instance_identifiers": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Member Instance Identifiers",
+            "type": "array"
+          },
+          "ownership": {
+            "title": "Ownership",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "tags": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Tags",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "db_cluster_identifier",
+          "db_cluster_arn",
+          "engine",
+          "engine_version",
+          "status",
+          "cluster_parameter_group_name",
+          "db_subnet_group_name",
+          "member_instance_identifiers",
+          "ownership",
+          "tags"
+        ],
+        "title": "ClusterSummary",
+        "type": "object"
+      },
+      "CreateAdoptionRequest": {
+        "description": "Body of `POST /terraform/adoptions`.",
+        "properties": {
+          "idempotency_key": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Idempotency Key",
+            "type": "string"
+          },
+          "resource_arns": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Resource Arns",
+            "type": "array"
+          },
+          "target_key": {
+            "title": "Target Key",
+            "type": "string"
+          }
+        },
+        "required": [
+          "target_key",
+          "resource_arns",
+          "idempotency_key"
+        ],
+        "title": "CreateAdoptionRequest",
+        "type": "object"
+      },
+      "DefinitionSummary": {
+        "description": "One catalogue entry for the frontend.\n\nAttributes:\n    pauses_for_approval: Whether a run stops at an approval step before it changes anything, in every\n        mode the definition is available in. When `pauses_for_approval_when` is set this is the general\n        answer and the chosen option value gives the exact one.\n    pauses_for_approval_when: Whether a run pauses, per value of the option that decides it (for\n        `drift_resolve`, the `choice` option: `{\"accept\": false, \"restore\": true}`); None when no\n        option changes the answer.",
+        "properties": {
+          "applies_to": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Applies To",
+            "type": "array"
+          },
+          "destructive": {
+            "title": "Destructive",
+            "type": "boolean"
+          },
+          "disruptive": {
+            "title": "Disruptive",
+            "type": "boolean"
+          },
+          "group": {
+            "title": "Group",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "modes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Modes",
+            "type": "array"
+          },
+          "needs_target": {
+            "title": "Needs Target",
+            "type": "boolean"
+          },
+          "options_schema": {
+            "additionalProperties": true,
+            "title": "Options Schema",
+            "type": "object"
+          },
+          "pauses_for_approval": {
+            "title": "Pauses For Approval",
+            "type": "boolean"
+          },
+          "pauses_for_approval_when": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "boolean"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pauses For Approval When"
+          },
+          "summary": {
+            "title": "Summary",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "title",
+          "group",
+          "summary",
+          "applies_to",
+          "modes",
+          "destructive",
+          "disruptive",
+          "needs_target",
+          "pauses_for_approval",
+          "pauses_for_approval_when",
+          "options_schema"
+        ],
+        "title": "DefinitionSummary",
+        "type": "object"
+      },
+      "DiagnosticSummary": {
+        "description": "Diagnostic row.",
+        "properties": {
+          "created_at_utc": {
+            "format": "date-time",
+            "title": "Created At Utc",
+            "type": "string"
+          },
+          "detail": {
+            "title": "Detail",
+            "type": "string"
+          },
+          "diagnostic_kind": {
+            "title": "Diagnostic Kind",
+            "type": "string"
+          },
+          "fix_suggestion": {
+            "title": "Fix Suggestion",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "severity": {
+            "title": "Severity",
+            "type": "string"
+          },
+          "step_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Step Name"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "step_name",
+          "severity",
+          "diagnostic_kind",
+          "title",
+          "detail",
+          "fix_suggestion",
+          "created_at_utc"
+        ],
+        "title": "DiagnosticSummary",
+        "type": "object"
+      },
+      "DriftAttribute": {
+        "description": "One attribute that differs between the record and reality.\n\nAttributes:\n    address: Terraform address of the resource, e.g. `aws_db_instance.demo_orders`.\n    attribute: Attribute path, e.g. `instance_class`, `tags.team` or `parameters.work_mem`; `presence`\n        when the resource exists on only one side.\n    recorded: The value in the record.\n    live: The value in reality.",
+        "properties": {
+          "address": {
+            "title": "Address",
+            "type": "string"
+          },
+          "attribute": {
+            "title": "Attribute",
+            "type": "string"
+          },
+          "live": {
+            "title": "Live"
+          },
+          "recorded": {
+            "title": "Recorded"
+          }
+        },
+        "required": [
+          "address",
+          "attribute",
+          "recorded",
+          "live"
+        ],
+        "title": "DriftAttribute",
+        "type": "object"
+      },
+      "DriftFindingView": {
+        "description": "An open drift finding for a resource.\n\nAttributes:\n    finding_kind: `record` when AWS differs from the committed record, `state` when the Terraform state\n        differs from the files.\n    attributes: What differs.\n    detected_at_utc: When the console first noticed the difference.\n\nExample:\n    >>> DriftFindingView(\n    ...     finding_kind=\"record\",\n    ...     attributes=[\n    ...         DriftAttribute(\n    ...             address=\"aws_db_instance.demo_orders\",\n    ...             attribute=\"instance_class\",\n    ...             recorded=\"db.m6g.large\",\n    ...             live=\"db.r6g.large\",\n    ...         )\n    ...     ],\n    ...     detected_at_utc=datetime(2026, 10, 10, 10, 0),\n    ... ).finding_kind\n    'record'",
+        "properties": {
+          "attributes": {
+            "items": {
+              "$ref": "#/components/schemas/DriftAttribute"
+            },
+            "title": "Attributes",
+            "type": "array"
+          },
+          "detected_at_utc": {
+            "format": "date-time",
+            "title": "Detected At Utc",
+            "type": "string"
+          },
+          "finding_kind": {
+            "title": "Finding Kind",
+            "type": "string"
+          }
+        },
+        "required": [
+          "finding_kind",
+          "attributes",
+          "detected_at_utc"
+        ],
+        "title": "DriftFindingView",
+        "type": "object"
+      },
+      "EngineVersionInfo": {
+        "description": "One engine version.\n\nAttributes:\n    engine: `postgres` or `aurora-postgresql`.\n    engine_version: The version, e.g. `16.4`.\n    parameter_group_family: The family its parameter groups use, e.g. `postgres16`.\n    valid_upgrade_targets: Versions it can be upgraded to.",
+        "properties": {
+          "engine": {
+            "title": "Engine",
+            "type": "string"
+          },
+          "engine_version": {
+            "title": "Engine Version",
+            "type": "string"
+          },
+          "parameter_group_family": {
+            "title": "Parameter Group Family",
+            "type": "string"
+          },
+          "valid_upgrade_targets": {
+            "items": {
+              "$ref": "#/components/schemas/UpgradeTarget"
+            },
+            "title": "Valid Upgrade Targets",
+            "type": "array"
+          }
+        },
+        "required": [
+          "engine",
+          "engine_version",
+          "parameter_group_family"
+        ],
+        "title": "EngineVersionInfo",
+        "type": "object"
+      },
+      "EngineVersionList": {
+        "description": "Versions of one engine.\n\nAttributes:\n    versions: Each version with its parameter group family and valid upgrade targets.",
+        "properties": {
+          "versions": {
+            "items": {
+              "$ref": "#/components/schemas/EngineVersionInfo"
+            },
+            "title": "Versions",
+            "type": "array"
+          }
+        },
+        "required": [
+          "versions"
+        ],
+        "title": "EngineVersionList",
+        "type": "object"
+      },
+      "EnvironmentComparison": {
+        "description": "Result of comparing two environments.\n\nAttributes:\n    left_slug: The left environment.\n    right_slug: The right environment.\n    pairs: Matched resources with their differences.\n    unmatched_left: Left resources with no counterpart on the right.\n    unmatched_right: Right resources with no counterpart on the left.",
+        "properties": {
+          "left_slug": {
+            "title": "Left Slug",
+            "type": "string"
+          },
+          "pairs": {
+            "items": {
+              "$ref": "#/components/schemas/ResourcePair"
+            },
+            "title": "Pairs",
+            "type": "array"
+          },
+          "right_slug": {
+            "title": "Right Slug",
+            "type": "string"
+          },
+          "unmatched_left": {
+            "items": {
+              "$ref": "#/components/schemas/UnmatchedResource"
+            },
+            "title": "Unmatched Left",
+            "type": "array"
+          },
+          "unmatched_right": {
+            "items": {
+              "$ref": "#/components/schemas/UnmatchedResource"
+            },
+            "title": "Unmatched Right",
+            "type": "array"
+          }
+        },
+        "required": [
+          "left_slug",
+          "right_slug",
+          "pairs",
+          "unmatched_left",
+          "unmatched_right"
+        ],
+        "title": "EnvironmentComparison",
+        "type": "object"
+      },
+      "EnvironmentInventory": {
+        "description": "Inventory of every target in one environment.",
+        "properties": {
+          "display_name": {
+            "title": "Display Name",
+            "type": "string"
+          },
+          "environment_slug": {
+            "title": "Environment Slug",
+            "type": "string"
+          },
+          "requires_approval": {
+            "title": "Requires Approval",
+            "type": "boolean"
+          },
+          "targets": {
+            "items": {
+              "$ref": "#/components/schemas/TargetInventory"
+            },
+            "title": "Targets",
+            "type": "array"
+          }
+        },
+        "required": [
+          "environment_slug",
+          "display_name",
+          "requires_approval",
+          "targets"
+        ],
+        "title": "EnvironmentInventory",
+        "type": "object"
+      },
+      "EnvironmentList": {
+        "description": "Every configured environment, in configuration order.",
+        "properties": {
+          "environments": {
+            "items": {
+              "$ref": "#/components/schemas/EnvironmentOverview"
+            },
+            "title": "Environments",
+            "type": "array"
+          }
+        },
+        "required": [
+          "environments"
+        ],
+        "title": "EnvironmentList",
+        "type": "object"
+      },
+      "EnvironmentOverview": {
+        "description": "One environment as listed on the Environments page and summarised on its own page.\n\nAttributes:\n    slug: Short name of the environment.\n    display_name: Name shown in the interface.\n    is_production: Whether the environment is production.\n    change_management: `terraform` or `direct`.\n    allow_direct_changes_to_foreign_owned: Whether resources owned by other tooling may be changed.\n    inventory_refresh_minutes: How often the inventory refreshes by itself.\n    drift_check_hours: How often drift is checked by itself.\n    counts: Resources by kind (`instance`, `cluster`, `parameter_group`, `snapshot`).\n    ownership_counts: Instances, clusters and parameter groups by ownership.\n    engine_versions: Instances and clusters by engine version.\n    last_refresh_at_utc: When the newest inventory snapshot of any target was taken; null if never.\n    running_operation_count: Operations of the environment that are queued, running or awaiting approval.\n    attention_count: Items the needs-attention inbox holds for the environment.",
+        "properties": {
+          "allow_direct_changes_to_foreign_owned": {
+            "title": "Allow Direct Changes To Foreign Owned",
+            "type": "boolean"
+          },
+          "attention_count": {
+            "title": "Attention Count",
+            "type": "integer"
+          },
+          "change_management": {
+            "title": "Change Management",
+            "type": "string"
+          },
+          "counts": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Counts",
+            "type": "object"
+          },
+          "display_name": {
+            "title": "Display Name",
+            "type": "string"
+          },
+          "drift_check_hours": {
+            "title": "Drift Check Hours",
+            "type": "integer"
+          },
+          "engine_versions": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Engine Versions",
+            "type": "object"
+          },
+          "inventory_refresh_minutes": {
+            "title": "Inventory Refresh Minutes",
+            "type": "integer"
+          },
+          "is_production": {
+            "title": "Is Production",
+            "type": "boolean"
+          },
+          "last_refresh_at_utc": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Refresh At Utc"
+          },
+          "ownership_counts": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Ownership Counts",
+            "type": "object"
+          },
+          "running_operation_count": {
+            "title": "Running Operation Count",
+            "type": "integer"
+          },
+          "slug": {
+            "title": "Slug",
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "display_name",
+          "is_production",
+          "change_management",
+          "allow_direct_changes_to_foreign_owned",
+          "inventory_refresh_minutes",
+          "drift_check_hours",
+          "counts",
+          "ownership_counts",
+          "engine_versions",
+          "last_refresh_at_utc",
+          "running_operation_count",
+          "attention_count"
+        ],
+        "title": "EnvironmentOverview",
+        "type": "object"
+      },
+      "EnvironmentPage": {
+        "description": "Everything the environment page needs.\n\nAttributes:\n    overview: The environment's summary.\n    targets: The environment's accounts and regions.\n    actions: Every environment-level catalogue operation with its applicability.\n    recent_operations: The latest operations of the environment, newest first.\n    change_events: The latest recorded changes in the environment, newest first.\n    drift: Open drift findings, each `{resource_arn, resource_id, finding_kind, attributes,\n        detected_at_utc}`; `resource_id` is null for a finding keyed by a Terraform address.\n    first_steps: What has been done so far: `imported`, `refreshed`, `adopted_or_direct`, `mode_set`.",
+        "properties": {
+          "actions": {
+            "items": {
+              "$ref": "#/components/schemas/ActionAvailability"
+            },
+            "title": "Actions",
+            "type": "array"
+          },
+          "change_events": {
+            "items": {
+              "$ref": "#/components/schemas/ChangeEventSummary"
+            },
+            "title": "Change Events",
+            "type": "array"
+          },
+          "drift": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Drift",
+            "type": "array"
+          },
+          "first_steps": {
+            "additionalProperties": {
+              "type": "boolean"
+            },
+            "title": "First Steps",
+            "type": "object"
+          },
+          "overview": {
+            "$ref": "#/components/schemas/EnvironmentOverview"
+          },
+          "recent_operations": {
+            "items": {
+              "$ref": "#/components/schemas/OperationSummary"
+            },
+            "title": "Recent Operations",
+            "type": "array"
+          },
+          "targets": {
+            "items": {
+              "$ref": "#/components/schemas/EnvironmentTargetView"
+            },
+            "title": "Targets",
+            "type": "array"
+          }
+        },
+        "required": [
+          "overview",
+          "targets",
+          "actions",
+          "recent_operations",
+          "change_events",
+          "drift",
+          "first_steps"
+        ],
+        "title": "EnvironmentPage",
+        "type": "object"
+      },
+      "EnvironmentSummary": {
+        "description": "One environment with its targets.\n\nAttributes:\n    slug: The environment's short name used in URLs and target keys.\n    display_name: The name the console shows.\n    is_production: Whether the console treats the environment as production (marked in the shell).\n    requires_approval: Whether changes wait for an approver.\n    change_management: `terraform` changes AWS through reviewed Terraform; `direct` changes it through\n        the AWS API and records the result in the repository.\n    allow_direct_changes_to_foreign_owned: Whether a direct change may touch a resource another tool\n        owns (the review then warns who owns it).\n    targets: The AWS accounts and regions of the environment.",
+        "properties": {
+          "allow_direct_changes_to_foreign_owned": {
+            "title": "Allow Direct Changes To Foreign Owned",
+            "type": "boolean"
+          },
+          "change_management": {
+            "enum": [
+              "terraform",
+              "direct"
+            ],
+            "title": "Change Management",
+            "type": "string"
+          },
+          "display_name": {
+            "title": "Display Name",
+            "type": "string"
+          },
+          "is_production": {
+            "title": "Is Production",
+            "type": "boolean"
+          },
+          "requires_approval": {
+            "title": "Requires Approval",
+            "type": "boolean"
+          },
+          "slug": {
+            "title": "Slug",
+            "type": "string"
+          },
+          "targets": {
+            "items": {
+              "$ref": "#/components/schemas/EnvironmentTargetSummary"
+            },
+            "title": "Targets",
+            "type": "array"
+          }
+        },
+        "required": [
+          "slug",
+          "display_name",
+          "is_production",
+          "requires_approval",
+          "change_management",
+          "allow_direct_changes_to_foreign_owned",
+          "targets"
+        ],
+        "title": "EnvironmentSummary",
+        "type": "object"
+      },
+      "EnvironmentTargetSummary": {
+        "description": "One AWS account and region inside an environment.",
+        "properties": {
+          "aws_account_id": {
+            "title": "Aws Account Id",
+            "type": "string"
+          },
+          "aws_profile_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aws Profile Name"
+          },
+          "aws_region": {
+            "title": "Aws Region",
+            "type": "string"
+          },
+          "simulated": {
+            "title": "Simulated",
+            "type": "boolean"
+          },
+          "target_key": {
+            "title": "Target Key",
+            "type": "string"
+          }
+        },
+        "required": [
+          "target_key",
+          "aws_account_id",
+          "aws_region",
+          "aws_profile_name",
+          "simulated"
+        ],
+        "title": "EnvironmentTargetSummary",
+        "type": "object"
+      },
+      "EnvironmentTargetView": {
+        "description": "One AWS account and region of an environment.\n\nAttributes:\n    target_key: `<environment_slug>/<aws_account_id>/<aws_region>`.\n    aws_account_id: The 12-digit account id.\n    aws_region: The region.\n    aws_profile_name: Profile used for the target; null for the simulated account.\n    simulated: Whether the target is the simulated account.\n    last_snapshot_at_utc: When the target was last inventoried; null if never.\n    workspace_relative_dir: Terraform workspace directory, relative to the repository root.\n    last_applied_commit_sha: Repository commit of the last applied Terraform files; null if none.",
+        "properties": {
+          "aws_account_id": {
+            "title": "Aws Account Id",
+            "type": "string"
+          },
+          "aws_profile_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aws Profile Name"
+          },
+          "aws_region": {
+            "title": "Aws Region",
+            "type": "string"
+          },
+          "last_applied_commit_sha": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Applied Commit Sha"
+          },
+          "last_snapshot_at_utc": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Snapshot At Utc"
+          },
+          "simulated": {
+            "title": "Simulated",
+            "type": "boolean"
+          },
+          "target_key": {
+            "title": "Target Key",
+            "type": "string"
+          },
+          "workspace_relative_dir": {
+            "title": "Workspace Relative Dir",
+            "type": "string"
+          }
+        },
+        "required": [
+          "target_key",
+          "aws_account_id",
+          "aws_region",
+          "aws_profile_name",
+          "simulated",
+          "last_snapshot_at_utc",
+          "workspace_relative_dir",
+          "last_applied_commit_sha"
+        ],
+        "title": "EnvironmentTargetView",
+        "type": "object"
+      },
+      "ExecutionRecordSummary": {
+        "description": "Execution record with full output.",
+        "properties": {
+          "api_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Api Name"
+          },
+          "command_line": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Command Line"
+          },
+          "duration_milliseconds": {
+            "title": "Duration Milliseconds",
+            "type": "integer"
+          },
+          "error_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Message"
+          },
+          "exit_code": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Exit Code"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "record_kind": {
+            "title": "Record Kind",
+            "type": "string"
+          },
+          "request_parameters": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Request Parameters"
+          },
+          "response_payload": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Response Payload"
+          },
+          "standard_error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Standard Error"
+          },
+          "standard_output": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Standard Output"
+          },
+          "started_at_utc": {
+            "format": "date-time",
+            "title": "Started At Utc",
+            "type": "string"
+          },
+          "step_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Step Name"
+          },
+          "succeeded": {
+            "title": "Succeeded",
+            "type": "boolean"
+          },
+          "target_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Key"
+          },
+          "working_directory": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Working Directory"
+          }
+        },
+        "required": [
+          "id",
+          "step_name",
+          "record_kind",
+          "target_key",
+          "command_line",
+          "working_directory",
+          "api_name",
+          "request_parameters",
+          "response_payload",
+          "standard_output",
+          "standard_error",
+          "exit_code",
+          "succeeded",
+          "error_message",
+          "started_at_utc",
+          "duration_milliseconds"
+        ],
+        "title": "ExecutionRecordSummary",
+        "type": "object"
+      },
+      "FamilyMetadata": {
+        "description": "All parameters that groups of one family and scope have.\n\nAttributes:\n    family: Family name, e.g. `postgres16`.\n    scope: `instance` or `cluster`: which kind of parameter group the parameters are for (`instance`\n        unless said otherwise, which is the only scope an RDS for PostgreSQL family has). It words\n        messages and is left out of API answers, whose request names the scope already.\n    fetched_at_utc: When the metadata was read from its source.\n    parameters: The family's parameters keyed by name.\n    source: `aws` when AWS answered, `bundled` when the bundled file was used.",
+        "properties": {
+          "family": {
+            "title": "Family",
+            "type": "string"
+          },
+          "fetched_at_utc": {
+            "format": "date-time",
+            "title": "Fetched At Utc",
+            "type": "string"
+          },
+          "parameters": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ParameterMetadata"
+            },
+            "title": "Parameters",
+            "type": "object"
+          },
+          "source": {
+            "enum": [
+              "aws",
+              "bundled"
+            ],
+            "title": "Source",
+            "type": "string"
+          }
+        },
+        "required": [
+          "family",
+          "fetched_at_utc",
+          "parameters",
+          "source"
+        ],
+        "title": "FamilyMetadata",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "HistoryPage": {
+        "description": "Search response.",
+        "properties": {
+          "records": {
+            "items": {
+              "$ref": "#/components/schemas/ExecutionRecordSummary"
+            },
+            "title": "Records",
+            "type": "array"
+          }
+        },
+        "required": [
+          "records"
+        ],
+        "title": "HistoryPage",
+        "type": "object"
+      },
+      "ImportEnvironmentRequest": {
+        "description": "Body of `POST /environments/import`.\n\nAttributes:\n    idempotency_key: Client-chosen key; repeating it returns the first operation created with it.\n    options: The `environment_import` options (see the catalogue for the schema).",
+        "properties": {
+          "idempotency_key": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Idempotency Key",
+            "type": "string"
+          },
+          "options": {
+            "additionalProperties": true,
+            "title": "Options",
+            "type": "object"
+          }
+        },
+        "required": [
+          "idempotency_key"
+        ],
+        "title": "ImportEnvironmentRequest",
+        "type": "object"
+      },
+      "InstanceClassList": {
+        "description": "Instance classes AWS offers for one engine version.\n\nAttributes:\n    classes: Sorted instance classes such as `db.m6g.large`; empty when the account cannot say.",
+        "properties": {
+          "classes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Classes",
+            "type": "array"
+          }
+        },
+        "required": [
+          "classes"
+        ],
+        "title": "InstanceClassList",
+        "type": "object"
+      },
+      "InstanceSummary": {
+        "description": "Instance row for the estate page.",
+        "properties": {
+          "db_cluster_identifier": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Db Cluster Identifier"
+          },
+          "db_instance_arn": {
+            "title": "Db Instance Arn",
+            "type": "string"
+          },
+          "db_instance_class": {
+            "title": "Db Instance Class",
+            "type": "string"
+          },
+          "db_instance_identifier": {
+            "title": "Db Instance Identifier",
+            "type": "string"
+          },
+          "db_instance_status": {
+            "title": "Db Instance Status",
+            "type": "string"
+          },
+          "db_subnet_group_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Db Subnet Group Name"
+          },
+          "engine": {
+            "title": "Engine",
+            "type": "string"
+          },
+          "engine_version": {
+            "title": "Engine Version",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "ownership": {
+            "title": "Ownership",
+            "type": "string"
+          },
+          "parameter_group_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parameter Group Name"
+          },
+          "read_replica_source_identifier": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Read Replica Source Identifier"
+          },
+          "tags": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Tags",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "db_instance_identifier",
+          "db_instance_arn",
+          "engine",
+          "engine_version",
+          "db_instance_class",
+          "db_instance_status",
+          "db_cluster_identifier",
+          "read_replica_source_identifier",
+          "parameter_group_name",
+          "db_subnet_group_name",
+          "ownership",
+          "tags"
+        ],
+        "title": "InstanceSummary",
+        "type": "object"
+      },
+      "InventorySnapshotSummary": {
+        "description": "Snapshot header.",
+        "properties": {
+          "captured_at_utc": {
+            "format": "date-time",
+            "title": "Captured At Utc",
+            "type": "string"
+          },
+          "cluster_count": {
+            "title": "Cluster Count",
+            "type": "integer"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "instance_count": {
+            "title": "Instance Count",
+            "type": "integer"
+          },
+          "operation_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Operation Id"
+          },
+          "parameter_group_count": {
+            "title": "Parameter Group Count",
+            "type": "integer"
+          },
+          "subnet_group_count": {
+            "title": "Subnet Group Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "operation_id",
+          "captured_at_utc",
+          "instance_count",
+          "cluster_count",
+          "parameter_group_count",
+          "subnet_group_count"
+        ],
+        "title": "InventorySnapshotSummary",
+        "type": "object"
+      },
+      "OperationCreateRequest": {
+        "description": "Body of `POST /operations`.",
+        "properties": {
+          "environment_slug": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Environment Slug"
+          },
+          "idempotency_key": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Idempotency Key",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "options": {
+            "additionalProperties": true,
+            "title": "Options",
+            "type": "object"
+          },
+          "resource_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resource Id"
+          }
+        },
+        "required": [
+          "kind",
+          "idempotency_key"
+        ],
+        "title": "OperationCreateRequest",
+        "type": "object"
+      },
+      "OperationCreatedResponse": {
+        "description": "Returned by every route that creates an operation.",
+        "properties": {
+          "operation_id": {
+            "format": "uuid",
+            "title": "Operation Id",
+            "type": "string"
+          },
+          "state": {
+            "title": "State",
+            "type": "string"
+          }
+        },
+        "required": [
+          "operation_id",
+          "state"
+        ],
+        "title": "OperationCreatedResponse",
+        "type": "object"
+      },
+      "OperationDetail": {
+        "description": "Everything about one operation.\n\nAttributes:\n    change_set: Direct mode: the attributes the operation will change, from the plan; None before it\n        has been computed and in Terraform mode. A chained operation's second change set follows the\n        first: the one shown at review, then the one computed after the approval.\n    change_set_verification: The live values read back after the change was applied; None until then.\n    requires_reboot: Whether any change in the change set only takes effect after a reboot.\n    downtime: What the approver should expect; `none` when nothing is interrupted.\n    pending_reboot_attributes: Attributes AWS holds until the next reboot, after verification.\n    foreign_owner_banner: The tooling that owns the resource when the environment allows changing it\n        anyway; the review shows it as a warning.\n    touched_addresses: Terraform addresses of the resources the operation changes.",
+        "properties": {
+          "approval_required_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Approval Required Text"
+          },
+          "approved_by_operator_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Approved By Operator Name"
+          },
+          "change_set": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/ChangeSetEntry"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Change Set"
+          },
+          "change_set_verification": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Change Set Verification"
+          },
+          "created_at_utc": {
+            "format": "date-time",
+            "title": "Created At Utc",
+            "type": "string"
+          },
+          "created_by_operator_name": {
+            "title": "Created By Operator Name",
+            "type": "string"
+          },
+          "diagnostic_reports": {
+            "items": {
+              "$ref": "#/components/schemas/DiagnosticSummary"
+            },
+            "title": "Diagnostic Reports",
+            "type": "array"
+          },
+          "downtime": {
+            "default": "none",
+            "title": "Downtime",
+            "type": "string"
+          },
+          "environment_slug": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Environment Slug"
+          },
+          "execution_records": {
+            "items": {
+              "$ref": "#/components/schemas/ExecutionRecordSummary"
+            },
+            "title": "Execution Records",
+            "type": "array"
+          },
+          "failure_summary": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Failure Summary"
+          },
+          "finished_at_utc": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finished At Utc"
+          },
+          "foreign_owner_banner": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Foreign Owner Banner"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "operation_kind": {
+            "title": "Operation Kind",
+            "type": "string"
+          },
+          "pending_reboot_attributes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Pending Reboot Attributes",
+            "type": "array"
+          },
+          "plan": {
+            "additionalProperties": true,
+            "title": "Plan",
+            "type": "object"
+          },
+          "progress": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OperationProgress"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "requires_reboot": {
+            "default": false,
+            "title": "Requires Reboot",
+            "type": "boolean"
+          },
+          "resource_arn": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resource Arn"
+          },
+          "resource_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The URL-safe id of `resource_arn`, or None when the operation has no resource.",
+            "readOnly": true,
+            "title": "Resource Id"
+          },
+          "state": {
+            "title": "State",
+            "type": "string"
+          },
+          "step_attempts": {
+            "items": {
+              "$ref": "#/components/schemas/StepAttemptSummary"
+            },
+            "title": "Step Attempts",
+            "type": "array"
+          },
+          "target_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Key"
+          },
+          "terraform_runs": {
+            "items": {
+              "$ref": "#/components/schemas/TerraformRunSummary"
+            },
+            "title": "Terraform Runs",
+            "type": "array"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "touched_addresses": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Touched Addresses",
+            "type": "array"
+          },
+          "updated_at_utc": {
+            "format": "date-time",
+            "title": "Updated At Utc",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "operation_kind",
+          "state",
+          "environment_slug",
+          "target_key",
+          "resource_arn",
+          "title",
+          "approval_required_text",
+          "created_by_operator_name",
+          "approved_by_operator_name",
+          "failure_summary",
+          "created_at_utc",
+          "updated_at_utc",
+          "finished_at_utc",
+          "plan",
+          "step_attempts",
+          "diagnostic_reports",
+          "execution_records",
+          "terraform_runs",
+          "resource_id"
+        ],
+        "title": "OperationDetail",
+        "type": "object"
+      },
+      "OperationList": {
+        "description": "List response.",
+        "properties": {
+          "operations": {
+            "items": {
+              "$ref": "#/components/schemas/OperationSummary"
+            },
+            "title": "Operations",
+            "type": "array"
+          }
+        },
+        "required": [
+          "operations"
+        ],
+        "title": "OperationList",
+        "type": "object"
+      },
+      "OperationProgress": {
+        "description": "How far an operation that has not finished has got.\n\nAttributes:\n    completed_steps: Steps with a completed attempt (a step the live state already satisfied counts).\n    total_steps: Steps the operation's executor will walk for this operation.\n    current_step: The step of the latest attempt; None before the first attempt.",
+        "properties": {
+          "completed_steps": {
+            "title": "Completed Steps",
+            "type": "integer"
+          },
+          "current_step": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Step"
+          },
+          "total_steps": {
+            "title": "Total Steps",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "completed_steps",
+          "total_steps",
+          "current_step"
+        ],
+        "title": "OperationProgress",
+        "type": "object"
+      },
+      "OperationSummary": {
+        "description": "List row.\n\nAttributes:\n    resource_arn: The resource the operation acts on; None for an operation on a whole environment.\n    resource_id: `resource_arn` as the URL-safe id the resource pages and filters use; None without one.\n    title: What the operation does, in the words the operator reads in the review.\n    approval_required_text: The text the operator must type to approve; None when a plain click suffices.\n    progress: Step progress; filled in the list for queued, running and awaiting-approval operations\n        whose kind has an executor, None everywhere else.",
+        "properties": {
+          "approval_required_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Approval Required Text"
+          },
+          "approved_by_operator_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Approved By Operator Name"
+          },
+          "created_at_utc": {
+            "format": "date-time",
+            "title": "Created At Utc",
+            "type": "string"
+          },
+          "created_by_operator_name": {
+            "title": "Created By Operator Name",
+            "type": "string"
+          },
+          "environment_slug": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Environment Slug"
+          },
+          "failure_summary": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Failure Summary"
+          },
+          "finished_at_utc": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finished At Utc"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "operation_kind": {
+            "title": "Operation Kind",
+            "type": "string"
+          },
+          "progress": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OperationProgress"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "resource_arn": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resource Arn"
+          },
+          "resource_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The URL-safe id of `resource_arn`, or None when the operation has no resource.",
+            "readOnly": true,
+            "title": "Resource Id"
+          },
+          "state": {
+            "title": "State",
+            "type": "string"
+          },
+          "target_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Key"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "updated_at_utc": {
+            "format": "date-time",
+            "title": "Updated At Utc",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "operation_kind",
+          "state",
+          "environment_slug",
+          "target_key",
+          "resource_arn",
+          "title",
+          "approval_required_text",
+          "created_by_operator_name",
+          "approved_by_operator_name",
+          "failure_summary",
+          "created_at_utc",
+          "updated_at_utc",
+          "finished_at_utc",
+          "resource_id"
+        ],
+        "title": "OperationSummary",
+        "type": "object"
+      },
+      "ParameterComparison": {
+        "description": "The result of comparing two parameter groups, or a group with its family's defaults.\n\nAttributes:\n    left_name: Name of the left group.\n    right_name: Name of the right group, or `<family> defaults`.\n    family_left: Family of the left group.\n    family_right: Family of the right side.\n    rows: One row per parameter overridden on either side (every family parameter when comparing with\n        defaults), sorted by name.",
+        "properties": {
+          "family_left": {
+            "title": "Family Left",
+            "type": "string"
+          },
+          "family_right": {
+            "title": "Family Right",
+            "type": "string"
+          },
+          "left_name": {
+            "title": "Left Name",
+            "type": "string"
+          },
+          "right_name": {
+            "title": "Right Name",
+            "type": "string"
+          },
+          "rows": {
+            "items": {
+              "$ref": "#/components/schemas/ParameterRow"
+            },
+            "title": "Rows",
+            "type": "array"
+          }
+        },
+        "required": [
+          "left_name",
+          "right_name",
+          "family_left",
+          "family_right",
+          "rows"
+        ],
+        "title": "ParameterComparison",
+        "type": "object"
+      },
+      "ParameterGroupParameters": {
+        "description": "Parameters of one group.",
+        "properties": {
+          "parameter_group_id": {
+            "title": "Parameter Group Id",
+            "type": "integer"
+          },
+          "parameter_group_name": {
+            "title": "Parameter Group Name",
+            "type": "string"
+          },
+          "parameters": {
+            "items": {
+              "$ref": "#/components/schemas/ParameterValueSummary"
+            },
+            "title": "Parameters",
+            "type": "array"
+          }
+        },
+        "required": [
+          "parameter_group_id",
+          "parameter_group_name",
+          "parameters"
+        ],
+        "title": "ParameterGroupParameters",
+        "type": "object"
+      },
+      "ParameterGroupSummary": {
+        "description": "Parameter group row.",
+        "properties": {
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "group_scope": {
+            "title": "Group Scope",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "is_default": {
+            "title": "Is Default",
+            "type": "boolean"
+          },
+          "ownership": {
+            "title": "Ownership",
+            "type": "string"
+          },
+          "parameter_group_arn": {
+            "title": "Parameter Group Arn",
+            "type": "string"
+          },
+          "parameter_group_family": {
+            "title": "Parameter Group Family",
+            "type": "string"
+          },
+          "parameter_group_name": {
+            "title": "Parameter Group Name",
+            "type": "string"
+          },
+          "tags": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Tags",
+            "type": "object"
+          },
+          "user_set_parameter_count": {
+            "title": "User Set Parameter Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "parameter_group_name",
+          "parameter_group_arn",
+          "parameter_group_family",
+          "group_scope",
+          "description",
+          "is_default",
+          "user_set_parameter_count",
+          "ownership",
+          "tags"
+        ],
+        "title": "ParameterGroupSummary",
+        "type": "object"
+      },
+      "ParameterMetadata": {
+        "description": "One parameter of a family.\n\nAttributes:\n    name: Parameter name, e.g. `work_mem`.\n    default_value: The engine default, which may be an RDS formula; None when the family sets none.\n    description: AWS's one-line description.\n    data_type: `integer`, `float`, `boolean`, `string` or `list`.\n    allowed_values: AWS's `AllowedValues`: a range such as `64-2147483647` or choices such as `0,1`.\n    is_modifiable: False for parameters only RDS may change.\n    apply_type: `dynamic` parameters apply without a reboot, `static` ones need a reboot.\n    apply_method_default: The apply method the console proposes: `immediate` or `pending-reboot`.\n    minimum_engine_version: First engine version that has the parameter, when AWS says.",
+        "properties": {
+          "allowed_values": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Allowed Values"
+          },
+          "apply_method_default": {
+            "enum": [
+              "immediate",
+              "pending-reboot"
+            ],
+            "title": "Apply Method Default",
+            "type": "string"
+          },
+          "apply_type": {
+            "enum": [
+              "dynamic",
+              "static"
+            ],
+            "title": "Apply Type",
+            "type": "string"
+          },
+          "data_type": {
+            "title": "Data Type",
+            "type": "string"
+          },
+          "default_value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Default Value"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "is_modifiable": {
+            "title": "Is Modifiable",
+            "type": "boolean"
+          },
+          "minimum_engine_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Minimum Engine Version"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "default_value",
+          "description",
+          "data_type",
+          "allowed_values",
+          "is_modifiable",
+          "apply_type",
+          "apply_method_default"
+        ],
+        "title": "ParameterMetadata",
+        "type": "object"
+      },
+      "ParameterRow": {
+        "description": "One parameter across the two sides.\n\nAttributes:\n    name: Parameter name.\n    left: The value set on the left group; None when the group leaves it at the default.\n    right: The value on the right side (another group's, or the default when comparing with defaults);\n        None when that group leaves it at the default.\n    default: The family's default value, which may be an RDS formula.\n    differs: Whether the two sides end up with different values once defaults are filled in.\n    apply_type: `dynamic` or `static` (a static parameter needs a reboot).\n    data_type: `integer`, `float`, `boolean`, `string` or `list`.\n    description: AWS's one-line description.",
+        "properties": {
+          "apply_type": {
+            "title": "Apply Type",
+            "type": "string"
+          },
+          "data_type": {
+            "title": "Data Type",
+            "type": "string"
+          },
+          "default": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Default"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "differs": {
+            "title": "Differs",
+            "type": "boolean"
+          },
+          "left": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Left"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "right": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Right"
+          }
+        },
+        "required": [
+          "name",
+          "left",
+          "right",
+          "default",
+          "differs",
+          "apply_type",
+          "data_type",
+          "description"
+        ],
+        "title": "ParameterRow",
+        "type": "object"
+      },
+      "ParameterValueSummary": {
+        "description": "One parameter.",
+        "properties": {
+          "apply_method": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Apply Method"
+          },
+          "apply_type": {
+            "title": "Apply Type",
+            "type": "string"
+          },
+          "data_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data Type"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "is_modifiable": {
+            "title": "Is Modifiable",
+            "type": "boolean"
+          },
+          "parameter_name": {
+            "title": "Parameter Name",
+            "type": "string"
+          },
+          "parameter_value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parameter Value"
+          },
+          "source": {
+            "title": "Source",
+            "type": "string"
+          }
+        },
+        "required": [
+          "parameter_name",
+          "parameter_value",
+          "source",
+          "apply_type",
+          "apply_method",
+          "data_type",
+          "is_modifiable",
+          "description"
+        ],
+        "title": "ParameterValueSummary",
+        "type": "object"
+      },
+      "PendingMaintenanceView": {
+        "description": "A maintenance action AWS has queued for an instance or cluster.\n\nAttributes:\n    action: The action, e.g. `system-update` or `db-upgrade`.\n    description: AWS's description of the action.\n    auto_applied_after_utc: AWS applies the action on its own after this time; None when it does not say.\n    current_apply_utc: When the action is scheduled to be applied now; None when it is not scheduled.\n    opt_in_status: `immediate`, `next-maintenance` or `undo-opt-in` once the action has been opted into;\n        None when no opt-in is recorded.\n\nExample:\n    >>> PendingMaintenanceView(action=\"system-update\", description=\"New OS patch\").opt_in_status is None\n    True",
+        "properties": {
+          "action": {
+            "title": "Action",
+            "type": "string"
+          },
+          "auto_applied_after_utc": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Auto Applied After Utc"
+          },
+          "current_apply_utc": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Apply Utc"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "opt_in_status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Opt In Status"
+          }
+        },
+        "required": [
+          "action",
+          "description"
+        ],
+        "title": "PendingMaintenanceView",
+        "type": "object"
+      },
+      "PlanView": {
+        "description": "Summary plus redacted JSON for the viewer.",
+        "properties": {
+          "plan_json": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Plan Json"
+          },
+          "plan_summary": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Plan Summary"
+          },
+          "run_id": {
+            "title": "Run Id",
+            "type": "integer"
+          },
+          "run_kind": {
+            "title": "Run Kind",
+            "type": "string"
+          }
+        },
+        "required": [
+          "run_id",
+          "run_kind",
+          "plan_summary",
+          "plan_json"
+        ],
+        "title": "PlanView",
+        "type": "object"
+      },
+      "ProfileList": {
+        "description": "AWS profiles available on this machine.",
+        "properties": {
+          "profiles": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Profiles",
+            "type": "array"
+          }
+        },
+        "required": [
+          "profiles"
+        ],
+        "title": "ProfileList",
+        "type": "object"
+      },
+      "RefreshInventoryRequest": {
+        "description": "Body of the refresh route.",
+        "properties": {
+          "idempotency_key": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Idempotency Key",
+            "type": "string"
+          }
+        },
+        "required": [
+          "idempotency_key"
+        ],
+        "title": "RefreshInventoryRequest",
+        "type": "object"
+      },
+      "ResourceKind": {
+        "description": "What a resource is.",
+        "enum": [
+          "environment",
+          "instance",
+          "cluster",
+          "parameter_group",
+          "snapshot"
+        ],
+        "title": "ResourceKind",
+        "type": "string"
+      },
+      "ResourceList": {
+        "description": "List response.",
+        "properties": {
+          "resources": {
+            "items": {
+              "$ref": "#/components/schemas/ResourceRecord"
+            },
+            "title": "Resources",
+            "type": "array"
+          }
+        },
+        "required": [
+          "resources"
+        ],
+        "title": "ResourceList",
+        "type": "object"
+      },
+      "ResourcePage": {
+        "description": "Everything the resource page needs.\n\nAttributes:\n    record: The resource as of the latest inventory snapshot of its target.\n    actions: Every catalogue operation that applies to the resource, with applicability.\n    recent_operations: Most recent operations that acted on the resource, newest first.\n    change_events: The latest recorded changes to the resource, newest first.\n    drift: Open drift findings for the resource; `finding_kind` is `record` or `state` and `attributes`\n        lists what differs.\n    pending_maintenance: Maintenance AWS has queued for the resource as of the inventory snapshot of\n        `record`, ordered by action; empty for resources AWS does not schedule maintenance for.",
+        "properties": {
+          "actions": {
+            "items": {
+              "$ref": "#/components/schemas/ActionAvailability"
+            },
+            "title": "Actions",
+            "type": "array"
+          },
+          "change_events": {
+            "items": {
+              "$ref": "#/components/schemas/ChangeEventSummary"
+            },
+            "title": "Change Events",
+            "type": "array"
+          },
+          "drift": {
+            "items": {
+              "$ref": "#/components/schemas/DriftFindingView"
+            },
+            "title": "Drift",
+            "type": "array"
+          },
+          "pending_maintenance": {
+            "items": {
+              "$ref": "#/components/schemas/PendingMaintenanceView"
+            },
+            "title": "Pending Maintenance",
+            "type": "array"
+          },
+          "recent_operations": {
+            "items": {
+              "$ref": "#/components/schemas/OperationSummary"
+            },
+            "title": "Recent Operations",
+            "type": "array"
+          },
+          "record": {
+            "$ref": "#/components/schemas/ResourceRecord"
+          }
+        },
+        "required": [
+          "record",
+          "actions",
+          "recent_operations"
+        ],
+        "title": "ResourcePage",
+        "type": "object"
+      },
+      "ResourcePair": {
+        "description": "A resource of the left environment and its counterpart in the right one.\n\nAttributes:\n    kind: Resource kind, e.g. `instance`.\n    left_identifier: AWS identifier in the left environment.\n    right_identifier: AWS identifier in the right environment.\n    left_resource_id: URL-safe id of the left resource, for its page.\n    right_resource_id: URL-safe id of the right resource, for its page.\n    differences: The attributes that differ; empty when the two are alike.",
+        "properties": {
+          "differences": {
+            "items": {
+              "$ref": "#/components/schemas/AttributeDifference"
+            },
+            "title": "Differences",
+            "type": "array"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "left_identifier": {
+            "title": "Left Identifier",
+            "type": "string"
+          },
+          "left_resource_id": {
+            "title": "Left Resource Id",
+            "type": "string"
+          },
+          "right_identifier": {
+            "title": "Right Identifier",
+            "type": "string"
+          },
+          "right_resource_id": {
+            "title": "Right Resource Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "left_identifier",
+          "right_identifier",
+          "left_resource_id",
+          "right_resource_id"
+        ],
+        "title": "ResourcePair",
+        "type": "object"
+      },
+      "ResourceRecord": {
+        "description": "A resource as of the latest inventory snapshot of its target.\n\nAttributes:\n    kind: What the resource is.\n    arn: AWS ARN; the resource's identity everywhere in the console.\n    resource_id: URL-safe id of the ARN (`encode_resource_id`), the value pages put in `/resources/{id}`.\n    identifier: The AWS identifier (instance id, cluster id, group name, snapshot id).\n    environment_slug: Environment the owning target belongs to.\n    target_key: `<environment_slug>/<aws_account_id>/<aws_region>` of the owning target.\n    ownership: Ownership classification recorded by the inventory refresh.\n    status: AWS status string.\n    facts: Scalar attributes about the resource.\n    relationships: Names and identifiers of related resources.\n    raw: The full AWS describe entry.\n    snapshot_id: Inventory snapshot the record was read from.\n    terraform_address: Terraform address when the resource is adopted, else None.\n    parameter_apply_status: Parameter group apply status for instances, else None.",
+        "properties": {
+          "arn": {
+            "title": "Arn",
+            "type": "string"
+          },
+          "environment_slug": {
+            "title": "Environment Slug",
+            "type": "string"
+          },
+          "facts": {
+            "additionalProperties": true,
+            "title": "Facts",
+            "type": "object"
+          },
+          "identifier": {
+            "title": "Identifier",
+            "type": "string"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/ResourceKind"
+          },
+          "ownership": {
+            "title": "Ownership",
+            "type": "string"
+          },
+          "parameter_apply_status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parameter Apply Status"
+          },
+          "raw": {
+            "additionalProperties": true,
+            "title": "Raw",
+            "type": "object"
+          },
+          "relationships": {
+            "additionalProperties": true,
+            "title": "Relationships",
+            "type": "object"
+          },
+          "resource_id": {
+            "title": "Resource Id",
+            "type": "string"
+          },
+          "snapshot_id": {
+            "title": "Snapshot Id",
+            "type": "integer"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "target_key": {
+            "title": "Target Key",
+            "type": "string"
+          },
+          "terraform_address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Terraform Address"
+          }
+        },
+        "required": [
+          "kind",
+          "arn",
+          "resource_id",
+          "identifier",
+          "environment_slug",
+          "target_key",
+          "ownership",
+          "status",
+          "snapshot_id"
+        ],
+        "title": "ResourceRecord",
+        "type": "object"
+      },
+      "RestoreWindowResponse": {
+        "description": "The times a point-in-time restore of an instance or cluster can choose.\n\nAttributes:\n    earliest_utc: The earliest restorable time, ISO 8601 UTC with a `Z`; None when unknown.\n    latest_restorable_utc: The latest restorable time AWS reports; None when unknown.\n    unknown_reason: Why the window is unknown (automated backups off, or AWS did not report it); None\n        when both times are given.",
+        "properties": {
+          "earliest_utc": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Earliest Utc"
+          },
+          "latest_restorable_utc": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latest Restorable Utc"
+          },
+          "unknown_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unknown Reason"
+          }
+        },
+        "required": [
+          "earliest_utc",
+          "latest_restorable_utc"
+        ],
+        "title": "RestoreWindowResponse",
+        "type": "object"
+      },
+      "SeedReportResponse": {
+        "description": "Seed report per target.",
+        "properties": {
+          "reports": {
+            "additionalProperties": {
+              "additionalProperties": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "type": "object"
+            },
+            "title": "Reports",
+            "type": "object"
+          }
+        },
+        "required": [
+          "reports"
+        ],
+        "title": "SeedReportResponse",
+        "type": "object"
+      },
+      "StepAttemptSummary": {
+        "description": "Step attempt row.",
+        "properties": {
+          "attempt_number": {
+            "title": "Attempt Number",
+            "type": "integer"
+          },
+          "detail": {
+            "title": "Detail",
+            "type": "string"
+          },
+          "finished_at_utc": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finished At Utc"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "observation_state": {
+            "title": "Observation State",
+            "type": "string"
+          },
+          "outcome_status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Outcome Status"
+          },
+          "output": {
+            "additionalProperties": true,
+            "title": "Output",
+            "type": "object"
+          },
+          "started_at_utc": {
+            "format": "date-time",
+            "title": "Started At Utc",
+            "type": "string"
+          },
+          "step_name": {
+            "title": "Step Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "step_name",
+          "attempt_number",
+          "observation_state",
+          "outcome_status",
+          "detail",
+          "output",
+          "started_at_utc",
+          "finished_at_utc"
+        ],
+        "title": "StepAttemptSummary",
+        "type": "object"
+      },
+      "SubnetGroupSummary": {
+        "description": "Subnet group row.",
+        "properties": {
+          "db_subnet_group_arn": {
+            "title": "Db Subnet Group Arn",
+            "type": "string"
+          },
+          "db_subnet_group_name": {
+            "title": "Db Subnet Group Name",
+            "type": "string"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "ownership": {
+            "title": "Ownership",
+            "type": "string"
+          },
+          "subnet_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Subnet Ids",
+            "type": "array"
+          },
+          "tags": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Tags",
+            "type": "object"
+          },
+          "vpc_id": {
+            "title": "Vpc Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "db_subnet_group_name",
+          "db_subnet_group_arn",
+          "vpc_id",
+          "subnet_ids",
+          "description",
+          "ownership",
+          "tags"
+        ],
+        "title": "SubnetGroupSummary",
+        "type": "object"
+      },
+      "TargetInventory": {
+        "description": "Everything known about one target.",
+        "properties": {
+          "aws_account_id": {
+            "title": "Aws Account Id",
+            "type": "string"
+          },
+          "aws_profile_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aws Profile Name"
+          },
+          "aws_region": {
+            "title": "Aws Region",
+            "type": "string"
+          },
+          "clusters": {
+            "items": {
+              "$ref": "#/components/schemas/ClusterSummary"
+            },
+            "title": "Clusters",
+            "type": "array"
+          },
+          "instances": {
+            "items": {
+              "$ref": "#/components/schemas/InstanceSummary"
+            },
+            "title": "Instances",
+            "type": "array"
+          },
+          "parameter_groups": {
+            "items": {
+              "$ref": "#/components/schemas/ParameterGroupSummary"
+            },
+            "title": "Parameter Groups",
+            "type": "array"
+          },
+          "simulated": {
+            "title": "Simulated",
+            "type": "boolean"
+          },
+          "snapshot": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/InventorySnapshotSummary"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "subnet_groups": {
+            "items": {
+              "$ref": "#/components/schemas/SubnetGroupSummary"
+            },
+            "title": "Subnet Groups",
+            "type": "array"
+          },
+          "target_key": {
+            "title": "Target Key",
+            "type": "string"
+          }
+        },
+        "required": [
+          "target_key",
+          "aws_account_id",
+          "aws_region",
+          "aws_profile_name",
+          "simulated",
+          "snapshot",
+          "instances",
+          "clusters",
+          "parameter_groups",
+          "subnet_groups"
+        ],
+        "title": "TargetInventory",
+        "type": "object"
+      },
+      "TerraformRunSummary": {
+        "description": "Terraform run row.",
+        "properties": {
+          "created_at_utc": {
+            "format": "date-time",
+            "title": "Created At Utc",
+            "type": "string"
+          },
+          "execution_record_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Execution Record Id"
+          },
+          "exit_code": {
+            "title": "Exit Code",
+            "type": "integer"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "plan_summary": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Plan Summary"
+          },
+          "run_kind": {
+            "title": "Run Kind",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "run_kind",
+          "exit_code",
+          "plan_summary",
+          "execution_record_id",
+          "created_at_utc"
+        ],
+        "title": "TerraformRunSummary",
+        "type": "object"
+      },
+      "UnmatchedResource": {
+        "description": "A resource with no counterpart in the other environment.\n\nAttributes:\n    kind: Resource kind, e.g. `instance`.\n    identifier: AWS identifier.\n    resource_id: URL-safe id of the resource, for its page.",
+        "properties": {
+          "identifier": {
+            "title": "Identifier",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "resource_id": {
+            "title": "Resource Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "identifier",
+          "resource_id"
+        ],
+        "title": "UnmatchedResource",
+        "type": "object"
+      },
+      "UpgradeGroupPlan": {
+        "description": "One group to build.\n\nAttributes:\n    scope: `instance` for an instance group, `cluster` for an Aurora cluster group.\n    source_group_name: The group the overrides were read from (an AWS default group has none to carry).\n    source_family: Family of the source group.\n    target_family: Family of the new group.\n    new_group_name: Name of the new group.\n    classifications: Every override of the source group, classified.\n    parameters_to_set: What the new group will hold unless the operator edits it on the review step.\n    already_built: Whether the group exists already because an earlier build created it from the same\n        source group for the same target family; the build then leaves it as it is and creates only\n        the groups that are missing.",
+        "properties": {
+          "already_built": {
+            "default": false,
+            "title": "Already Built",
+            "type": "boolean"
+          },
+          "classifications": {
+            "items": {
+              "$ref": "#/components/schemas/Classification"
+            },
+            "title": "Classifications",
+            "type": "array"
+          },
+          "new_group_name": {
+            "title": "New Group Name",
+            "type": "string"
+          },
+          "parameters_to_set": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Parameters To Set",
+            "type": "object"
+          },
+          "scope": {
+            "enum": [
+              "instance",
+              "cluster"
+            ],
+            "title": "Scope",
+            "type": "string"
+          },
+          "source_family": {
+            "title": "Source Family",
+            "type": "string"
+          },
+          "source_group_name": {
+            "title": "Source Group Name",
+            "type": "string"
+          },
+          "target_family": {
+            "title": "Target Family",
+            "type": "string"
+          }
+        },
+        "required": [
+          "scope",
+          "source_group_name",
+          "source_family",
+          "target_family",
+          "new_group_name",
+          "classifications",
+          "parameters_to_set"
+        ],
+        "title": "UpgradeGroupPlan",
+        "type": "object"
+      },
+      "UpgradePreview": {
+        "description": "What the review step shows: the plans and the families they are built for.",
+        "properties": {
+          "plans": {
+            "items": {
+              "$ref": "#/components/schemas/UpgradeGroupPlan"
+            },
+            "title": "Plans",
+            "type": "array"
+          },
+          "target_family_cluster": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Family Cluster"
+          },
+          "target_family_instance": {
+            "title": "Target Family Instance",
+            "type": "string"
+          }
+        },
+        "required": [
+          "plans",
+          "target_family_instance",
+          "target_family_cluster"
+        ],
+        "title": "UpgradePreview",
+        "type": "object"
+      },
+      "UpgradePreviewRequest": {
+        "description": "The resource to build upgrade groups for and the version it will be upgraded to.\n\nAttributes:\n    resource_id: Resource id of the instance or cluster.\n    target_engine_version: The version it will be upgraded to, e.g. `17.2`.",
+        "properties": {
+          "resource_id": {
+            "title": "Resource Id",
+            "type": "string"
+          },
+          "target_engine_version": {
+            "pattern": "^\\d+(\\.\\d+){0,2}$",
+            "title": "Target Engine Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "resource_id",
+          "target_engine_version"
+        ],
+        "title": "UpgradePreviewRequest",
+        "type": "object"
+      },
+      "UpgradeTarget": {
+        "description": "One valid upgrade target.\n\nAttributes:\n    engine_version: The target version, e.g. `17.2`.\n    is_major: True when upgrading to it changes the major version.",
+        "properties": {
+          "engine_version": {
+            "title": "Engine Version",
+            "type": "string"
+          },
+          "is_major": {
+            "title": "Is Major",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "engine_version",
+          "is_major"
+        ],
+        "title": "UpgradeTarget",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      },
+      "WorkspaceList": {
+        "description": "List response.",
+        "properties": {
+          "workspaces": {
+            "items": {
+              "$ref": "#/components/schemas/WorkspaceSummary"
+            },
+            "title": "Workspaces",
+            "type": "array"
+          }
+        },
+        "required": [
+          "workspaces"
+        ],
+        "title": "WorkspaceList",
+        "type": "object"
+      },
+      "WorkspaceSummary": {
+        "description": "Workspace row.",
+        "properties": {
+          "adoptions": {
+            "items": {
+              "$ref": "#/components/schemas/AdoptionSummary"
+            },
+            "title": "Adoptions",
+            "type": "array"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "last_applied_at_utc": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Applied At Utc"
+          },
+          "last_applied_commit_sha": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Applied Commit Sha"
+          },
+          "last_plan_summary": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Plan Summary"
+          },
+          "state_bucket_name": {
+            "title": "State Bucket Name",
+            "type": "string"
+          },
+          "state_key": {
+            "title": "State Key",
+            "type": "string"
+          },
+          "target_key": {
+            "title": "Target Key",
+            "type": "string"
+          },
+          "workspace_relative_dir": {
+            "title": "Workspace Relative Dir",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "target_key",
+          "workspace_relative_dir",
+          "state_bucket_name",
+          "state_key",
+          "last_applied_commit_sha",
+          "last_plan_summary",
+          "last_applied_at_utc",
+          "adoptions"
+        ],
+        "title": "WorkspaceSummary",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "RDS Commander",
+    "version": "0.5.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/v1/attention": {
+      "get": {
+        "description": "Everything that needs a person, optionally for one environment.\n\nArgs:\n    request: The request; configuration and sessions come from `app.state`.\n    environment_slug: Restrict the inbox to one environment; every environment when omitted.\n\nReturns:\n    The inbox sections: operations awaiting approval, parameter changes pending a reboot, pending\n    maintenance, open drift, unreviewed changes made outside the console, operations that failed in the\n    last seven days (and failed or rejected major upgrades that left a blue/green deployment in place),\n    foreign-owned resources, unmanaged resources in Terraform-mode environments, and the blue side major\n    upgrades kept.\n\nRaises:\n    HTTPException: 404 when `environment_slug` names no environment.\n\nExample:\n    >>> client.get(\"/api/v1/attention\", params={\"environment_slug\": \"sandbox\"}).json()[\"drift\"]\n    []",
+        "operationId": "read_attention_api_v1_attention_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "environment_slug",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Environment Slug"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttentionInbox"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Read Attention",
+        "tags": [
+          "attention"
+        ]
+      }
+    },
+    "/api/v1/bootstrap": {
+      "get": {
+        "description": "Return the CSRF token, operator identity, and configured environments.",
+        "operationId": "read_bootstrap_api_v1_bootstrap_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BootstrapResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Read Bootstrap",
+        "tags": [
+          "bootstrap"
+        ]
+      }
+    },
+    "/api/v1/catalogue": {
+      "get": {
+        "description": "Every operation definition with its options schema.",
+        "operationId": "read_catalogue_api_v1_catalogue_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogueResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Read Catalogue",
+        "tags": [
+          "catalogue"
+        ]
+      }
+    },
+    "/api/v1/environments": {
+      "get": {
+        "description": "Every environment with its resource counts, last refresh, running operations and attention items.",
+        "operationId": "list_environments_api_v1_environments_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvironmentList"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Environments",
+        "tags": [
+          "environments"
+        ]
+      }
+    },
+    "/api/v1/environments/compare": {
+      "get": {
+        "description": "Match the resources of two environments and list the attributes that differ.\n\nArgs:\n    request: The request; configuration and sessions come from `app.state`.\n    left: Slug of the left environment.\n    right: Slug of the right environment.\n    strip: Comma-separated suffixes or prefixes that differ between the environments' naming,\n        for example `-prod,-prd`; empty to match by exact identifier only.\n\nReturns:\n    Matched pairs with their differences, and the resources that have no counterpart.\n\nRaises:\n    HTTPException: 404 when either slug names no environment.\n\nExample:\n    >>> client.get(  # doctest: +SKIP\n    ...     \"/api/v1/environments/compare\",\n    ...     params={\"left\": \"staging\", \"right\": \"production\", \"strip\": \"-prod\"},\n    ... ).json()[\"pairs\"][0][\"left_identifier\"]\n    'orders'",
+        "operationId": "compare_two_environments_api_v1_environments_compare_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "left",
+            "required": true,
+            "schema": {
+              "title": "Left",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "right",
+            "required": true,
+            "schema": {
+              "title": "Right",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "strip",
+            "required": false,
+            "schema": {
+              "default": "",
+              "title": "Strip",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvironmentComparison"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Compare Two Environments",
+        "tags": [
+          "environments"
+        ]
+      }
+    },
+    "/api/v1/environments/import": {
+      "post": {
+        "description": "Create an `environment_import` operation through the operation catalogue.\n\nThe operation confirms the account, scans the regions, adds the environment to\n`config/environments.yaml`, commits that file, reloads the configuration and queues an inventory\nrefresh. Invalid options are answered 422 with `{detail, problems}`.",
+        "operationId": "import_environment_api_v1_environments_import_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImportEnvironmentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationCreatedResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Import Environment",
+        "tags": [
+          "environments"
+        ]
+      }
+    },
+    "/api/v1/environments/import/profiles": {
+      "get": {
+        "description": "The AWS profiles on this machine, from the mounted AWS CLI config file.",
+        "operationId": "list_importable_profiles_api_v1_environments_import_profiles_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileList"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Importable Profiles",
+        "tags": [
+          "environments"
+        ]
+      }
+    },
+    "/api/v1/environments/{slug}": {
+      "get": {
+        "description": "One environment: overview, targets, actions, recent operations, change events, drift, first steps.",
+        "operationId": "read_environment_page_api_v1_environments__slug__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "title": "Slug",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvironmentPage"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Read Environment Page",
+        "tags": [
+          "environments"
+        ]
+      }
+    },
+    "/api/v1/environments/{slug}/inventory": {
+      "get": {
+        "description": "Latest snapshot per target of `slug`.",
+        "operationId": "read_environment_inventory_api_v1_environments__slug__inventory_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "title": "Slug",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvironmentInventory"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Read Environment Inventory",
+        "tags": [
+          "environments"
+        ]
+      }
+    },
+    "/api/v1/environments/{slug}/inventory/refresh": {
+      "post": {
+        "description": "Create an `inventory_refresh` operation for `slug` through the operation catalogue.",
+        "operationId": "refresh_environment_inventory_api_v1_environments__slug__inventory_refresh_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "title": "Slug",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshInventoryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationCreatedResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Refresh Environment Inventory",
+        "tags": [
+          "environments"
+        ]
+      }
+    },
+    "/api/v1/environments/{slug}/resources": {
+      "get": {
+        "description": "Resources of an environment, optionally one kind and optionally only those a task applies to.\n\nArgs:\n    request: The request; configuration and sessions come from `app.state`.\n    slug: Environment to list.\n    kind: Restrict to one resource kind.\n    applicable_to: A catalogue operation kind, e.g. `terraform_adoption`. Only resources for which the\n        catalogue reports that operation as applicable are returned, so a launcher can offer exactly\n        the resources the task will accept: an adoption never lists a default or already adopted\n        group, a drift resolution only what has an open finding.\n\nReturns:\n    The matching records, in inventory order.\n\nRaises:\n    HTTPException: 404 when `slug` names no environment or `applicable_to` names no operation.\n\nExample:\n    >>> client.get(\n    ...     \"/api/v1/environments/sandbox/resources\",\n    ...     params={\"kind\": \"parameter_group\", \"applicable_to\": \"drift_resolve\"},\n    ... ).json()[\"resources\"]\n    []",
+        "operationId": "list_environment_resources_api_v1_environments__slug__resources_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "title": "Slug",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "kind",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ResourceKind"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Kind"
+            }
+          },
+          {
+            "in": "query",
+            "name": "applicable_to",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Applicable To"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceList"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Environment Resources",
+        "tags": [
+          "resources"
+        ]
+      }
+    },
+    "/api/v1/environments/{slug}/simulated/reset": {
+      "post": {
+        "description": "Seed the simulated targets of `slug`; 422 when the environment has none.",
+        "operationId": "reset_simulated_environment_api_v1_environments__slug__simulated_reset_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "title": "Slug",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SeedReportResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Reset Simulated Environment",
+        "tags": [
+          "simulated"
+        ]
+      }
+    },
+    "/api/v1/history": {
+      "get": {
+        "description": "Filter execution records.",
+        "operationId": "search_history_api_v1_history_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "environment_slug",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Environment Slug"
+            }
+          },
+          {
+            "in": "query",
+            "name": "record_kind",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Record Kind"
+            }
+          },
+          {
+            "in": "query",
+            "name": "target_key",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Target Key"
+            }
+          },
+          {
+            "in": "query",
+            "name": "text",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Text"
+            }
+          },
+          {
+            "in": "query",
+            "name": "since",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Since"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "maximum": 1000,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HistoryPage"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Search History",
+        "tags": [
+          "history"
+        ]
+      }
+    },
+    "/api/v1/history/changes": {
+      "get": {
+        "description": "Filter change events, newest first.\n\n`unreviewed_only` keeps outside-console changes nobody has reviewed yet.",
+        "operationId": "list_change_events_api_v1_history_changes_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "environment_slug",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Environment Slug"
+            }
+          },
+          {
+            "in": "query",
+            "name": "resource_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Resource Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "explanation",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Explanation"
+            }
+          },
+          {
+            "in": "query",
+            "name": "since",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Since"
+            }
+          },
+          {
+            "in": "query",
+            "name": "unreviewed_only",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Unreviewed Only",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 200,
+              "maximum": 2000,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangeEventPage"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Change Events",
+        "tags": [
+          "history"
+        ]
+      }
+    },
+    "/api/v1/history/changes/{event_id}/review": {
+      "post": {
+        "description": "Mark a change as reviewed by the current operator.",
+        "operationId": "review_change_api_v1_history_changes__event_id__review_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "event_id",
+            "required": true,
+            "schema": {
+              "title": "Event Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangeEventSummary"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Review Change",
+        "tags": [
+          "history"
+        ]
+      }
+    },
+    "/api/v1/history/export": {
+      "get": {
+        "description": "Same filters, larger page, plain JSON array for download.",
+        "operationId": "export_history_api_v1_history_export_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "environment_slug",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Environment Slug"
+            }
+          },
+          {
+            "in": "query",
+            "name": "record_kind",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Record Kind"
+            }
+          },
+          {
+            "in": "query",
+            "name": "target_key",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Target Key"
+            }
+          },
+          {
+            "in": "query",
+            "name": "since",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Since"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 10000,
+              "maximum": 100000,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ExecutionRecordSummary"
+                  },
+                  "title": "Response Export History Api V1 History Export Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Export History",
+        "tags": [
+          "history"
+        ]
+      }
+    },
+    "/api/v1/inventory/parameter-groups/{parameter_group_id}/parameters": {
+      "get": {
+        "description": "Every parameter of one captured group.",
+        "operationId": "read_parameter_group_parameters_api_v1_inventory_parameter_groups__parameter_group_id__parameters_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "parameter_group_id",
+            "required": true,
+            "schema": {
+              "title": "Parameter Group Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ParameterGroupParameters"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Read Parameter Group Parameters",
+        "tags": [
+          "environments"
+        ]
+      }
+    },
+    "/api/v1/lifecycle/instance-classes": {
+      "get": {
+        "description": "The instance classes AWS offers for an engine version: of a resource, or one a create chose.\n\nWith `resource_id`, the engine and version are the instance's, cluster's or snapshot's (a snapshot for the\nrestore form). Without one (an instance or cluster create), `engine` and `engine_version` say what to\nask about, in `target_key` or else the environment's first target.\n\nArgs:\n    request: The incoming request.\n    environment_slug: Environment the resource or the create belongs to.\n    resource_id: Resource id of the instance, cluster or snapshot; None for a create.\n    engine: `postgres` or `aurora-postgresql`, when no resource is given.\n    engine_version: The version, such as `16.4`, when no resource is given.\n    target_key: The target a create puts its resource in; the environment's first target when None.\n\nReturns:\n    The orderable classes, sorted; an empty list when the simulated account cannot answer.\n\nRaises:\n    HTTPException: 404 for an id that is not a resource id, a resource missing from the latest inventory\n        of the environment, or an unknown environment or target; 422 when the resource is not an\n        instance, cluster or snapshot, or neither a resource nor an engine and version is given; 502,\n        with the diagnosis, when AWS fails.\n\nExample:\n    GET /api/v1/lifecycle/instance-classes?environment_slug=sandbox&resource_id=... returns\n    `{\"classes\": [\"db.m6g.large\", \"db.m6g.xlarge\"]}`; so does\n    `?environment_slug=sandbox&engine=postgres&engine_version=16.4`.",
+        "operationId": "read_instance_classes_api_v1_lifecycle_instance_classes_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "environment_slug",
+            "required": true,
+            "schema": {
+              "title": "Environment Slug",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "resource_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Resource Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "engine",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "postgres",
+                    "aurora-postgresql"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Engine"
+            }
+          },
+          {
+            "in": "query",
+            "name": "engine_version",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Engine Version"
+            }
+          },
+          {
+            "in": "query",
+            "name": "target_key",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Target Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InstanceClassList"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Read Instance Classes",
+        "tags": [
+          "lifecycle"
+        ]
+      }
+    },
+    "/api/v1/lifecycle/restore-window/{resource_id}": {
+      "get": {
+        "description": "The window a point-in-time restore of an instance or cluster can choose a time from.\n\nRead from the latest inventory (`LatestRestorableTime`, and `EarliestRestorableTime` or the creation time\nand backup retention); nothing is asked of AWS. The point-in-time restore checks a chosen time against\nthe same window.\n\nArgs:\n    request: The incoming request.\n    resource_id: Resource id of the instance or cluster.\n\nReturns:\n    Both times as ISO 8601 UTC, or nulls with the reason when the inventory cannot say.\n\nRaises:\n    HTTPException: 404 for an id that is not a resource id or a resource missing from the latest\n        inventory; 422 when the resource is not an instance or cluster.\n\nExample:\n    GET /api/v1/lifecycle/restore-window/<id> returns\n    `{\"earliest_utc\": \"2026-10-04T09:55:00Z\", \"latest_restorable_utc\": \"2026-10-11T09:55:00Z\",\n    \"unknown_reason\": null}`.",
+        "operationId": "read_restore_window_api_v1_lifecycle_restore_window__resource_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "resource_id",
+            "required": true,
+            "schema": {
+              "title": "Resource Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RestoreWindowResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Read Restore Window",
+        "tags": [
+          "lifecycle"
+        ]
+      }
+    },
+    "/api/v1/operations": {
+      "get": {
+        "description": "Most recent first.\n\nWithout `environment_slug` the list covers every environment and the operations that belong to none\n(environment imports). `kind` keeps one operation kind (`operation_kind` is the same filter by its older\nname); `kind=environment_import` finds imports even with an `environment_slug`, since an import belongs\nto no environment. `resource_id` keeps the operations on one resource (a value from a resource page or\nan operation row); `state` keeps the given states, one or several separated by commas (`RUNNING`, or\n`QUEUED,RUNNING,AWAITING_APPROVAL` for everything in progress). A queued, running or awaiting-approval\nrow carries `progress` (completed and total steps, the current step) when its kind has an executor.\n\nRaises:\n    HTTPException: 422 when `resource_id` is malformed, or `kind` and `operation_kind` differ.",
+        "operationId": "list_operations_api_v1_operations_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "environment_slug",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Environment Slug"
+            }
+          },
+          {
+            "description": "Keep operations of this kind, e.g. environment_import",
+            "in": "query",
+            "name": "kind",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Keep operations of this kind, e.g. environment_import",
+              "title": "Kind"
+            }
+          },
+          {
+            "description": "The same filter as kind, by its older name",
+            "in": "query",
+            "name": "operation_kind",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The same filter as kind, by its older name",
+              "title": "Operation Kind"
+            }
+          },
+          {
+            "in": "query",
+            "name": "resource_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Resource Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "state",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "State"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 500,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationList"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Operations",
+        "tags": [
+          "operations"
+        ]
+      },
+      "post": {
+        "description": "Create any catalogue operation.",
+        "operationId": "create_operation_api_v1_operations_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OperationCreateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationCreatedResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Operation",
+        "tags": [
+          "catalogue"
+        ]
+      }
+    },
+    "/api/v1/operations/{operation_id}": {
+      "get": {
+        "description": "Detail with attempts, diagnostics, records, and runs.",
+        "operationId": "read_operation_api_v1_operations__operation_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "operation_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Operation Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationDetail"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Read Operation",
+        "tags": [
+          "operations"
+        ]
+      }
+    },
+    "/api/v1/operations/{operation_id}/approve": {
+      "post": {
+        "description": "Approve an operation awaiting approval, for the stage reviewed and with the typed identifier.\n\nA 409 with `diagnostic_kind` `approval_stage_mismatch` or `confirmation_text_mismatch` leaves the\noperation waiting.",
+        "operationId": "approve_operation_api_v1_operations__operation_id__approve_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "operation_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Operation Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/ApprovalRequest"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Approval"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationSummary"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Approve Operation",
+        "tags": [
+          "operations"
+        ]
+      }
+    },
+    "/api/v1/operations/{operation_id}/reject": {
+      "post": {
+        "description": "Reject an operation awaiting approval.",
+        "operationId": "reject_operation_api_v1_operations__operation_id__reject_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "operation_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Operation Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationSummary"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Reject Operation",
+        "tags": [
+          "operations"
+        ]
+      }
+    },
+    "/api/v1/parameters/compare": {
+      "get": {
+        "description": "Compare a parameter group with its family's defaults or with another group.\n\nArgs:\n    request: The incoming request.\n    left: Resource id of the left parameter group.\n    right: Resource id of the right parameter group; the family defaults when omitted.\n    against_defaults: Compare with the family defaults even when `right` is given.\n\nReturns:\n    One row per parameter overridden on either side (every family parameter against defaults), with the\n    two values, the family default, whether they differ and whether the parameter needs a reboot.\n\nRaises:\n    HTTPException: 404 for an id that is not a resource id or a group missing from the latest inventory\n        (or a family neither cached nor bundled); 422 when a resource is not a parameter group.",
+        "operationId": "read_comparison_api_v1_parameters_compare_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "left",
+            "required": true,
+            "schema": {
+              "title": "Left",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "right",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Right"
+            }
+          },
+          {
+            "in": "query",
+            "name": "against_defaults",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Against Defaults",
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ParameterComparison"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Read Comparison",
+        "tags": [
+          "parameters"
+        ]
+      }
+    },
+    "/api/v1/parameters/engine-versions": {
+      "get": {
+        "description": "Engine versions with families and upgrade targets.\n\nArgs:\n    request: The incoming request.\n    environment_slug: Environment whose first target is asked (a simulated one answers from the bundle).\n    engine: `postgres` or `aurora-postgresql`.\n\nReturns:\n    The engine's versions, each with its parameter group family and valid upgrade targets.\n\nRaises:\n    HTTPException: 404 for an unknown environment; 502, with the diagnosis, when AWS fails.",
+        "operationId": "read_engine_versions_api_v1_parameters_engine_versions_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "environment_slug",
+            "required": true,
+            "schema": {
+              "title": "Environment Slug",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "engine",
+            "required": true,
+            "schema": {
+              "enum": [
+                "postgres",
+                "aurora-postgresql"
+              ],
+              "title": "Engine",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EngineVersionList"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Read Engine Versions",
+        "tags": [
+          "parameters"
+        ]
+      }
+    },
+    "/api/v1/parameters/families/{family}": {
+      "get": {
+        "description": "Metadata for a family's instance or cluster parameter groups, through the environment's first target.\n\nArgs:\n    request: The incoming request.\n    family: Parameter group family, e.g. `postgres16`.\n    environment_slug: Environment whose first target is asked (a simulated one answers from the bundle).\n    scope: `instance` for instance parameter groups (the default), `cluster` for cluster parameter\n        groups; an Aurora family lists other parameters for each.\n\nReturns:\n    The parameters that groups of that family and scope have, with allowed values and apply types, and\n    whether AWS or the bundle supplied them.\n\nRaises:\n    HTTPException: 404 for an unknown environment or family; 502, with the diagnosis, when AWS fails.",
+        "operationId": "read_family_api_v1_parameters_families__family__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "family",
+            "required": true,
+            "schema": {
+              "title": "Family",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "environment_slug",
+            "required": true,
+            "schema": {
+              "title": "Environment Slug",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "scope",
+            "required": false,
+            "schema": {
+              "default": "instance",
+              "enum": [
+                "instance",
+                "cluster"
+              ],
+              "title": "Scope",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FamilyMetadata"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Read Family",
+        "tags": [
+          "parameters"
+        ]
+      }
+    },
+    "/api/v1/parameters/upgrade-preview": {
+      "post": {
+        "description": "Classify the current overrides against the target family without changing anything.\n\nArgs:\n    request: The incoming request.\n    body: The instance or cluster and the version it will be upgraded to.\n\nReturns:\n    One plan per group an upgrade build would create (the instance group and, for a cluster, the\n    cluster group): the source group, the new group's name and family, every override classified as\n    carried, default changed, needing review, removed or renamed, and the parameters the new group would\n    hold. Also the families the instance and cluster groups are built for.\n\nRaises:\n    HTTPException: 404 for an id that is not a resource id or a resource missing from the latest\n        inventory; 422 when the groups cannot be worked out (the members of a cluster use different\n        instance groups, or a family is unknown); 502, with the diagnosis, when AWS fails.",
+        "operationId": "upgrade_preview_api_v1_parameters_upgrade_preview_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpgradePreviewRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpgradePreview"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Upgrade Preview",
+        "tags": [
+          "parameters"
+        ]
+      }
+    },
+    "/api/v1/resources/{resource_id}": {
+      "get": {
+        "description": "Record, applicable actions, recent operations, change events and open drift findings.\n\nA parameter group the console built for an upgrade carries `record.facts[\"provenance\"]`: the groups its\noverrides came from, the family it was built for and what became of each override.",
+        "operationId": "read_resource_api_v1_resources__resource_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "resource_id",
+            "required": true,
+            "schema": {
+              "title": "Resource Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourcePage"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Read Resource",
+        "tags": [
+          "resources"
+        ]
+      }
+    },
+    "/api/v1/terraform/adoptions": {
+      "post": {
+        "description": "Validate the selection and queue a `terraform_adoption` operation through the operation catalogue.",
+        "operationId": "create_adoption_api_v1_terraform_adoptions_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAdoptionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationCreatedResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdoptionProblems"
+                }
+              }
+            },
+            "description": "selection problems"
+          }
+        },
+        "summary": "Create Adoption",
+        "tags": [
+          "terraform"
+        ]
+      }
+    },
+    "/api/v1/terraform/runs/{run_id}/plan": {
+      "get": {
+        "description": "Plan JSON (redacted) and summary of one run.",
+        "operationId": "read_plan_api_v1_terraform_runs__run_id__plan_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "run_id",
+            "required": true,
+            "schema": {
+              "title": "Run Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Read Plan",
+        "tags": [
+          "terraform"
+        ]
+      }
+    },
+    "/api/v1/terraform/workspaces": {
+      "get": {
+        "description": "Every workspace with its adoptions.",
+        "operationId": "list_workspaces_api_v1_terraform_workspaces_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkspaceList"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Workspaces",
+        "tags": [
+          "terraform"
+        ]
+      }
+    }
+  }
+}
