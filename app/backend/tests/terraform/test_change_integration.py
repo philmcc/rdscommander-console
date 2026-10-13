@@ -84,8 +84,10 @@ def test_terraform_mode_attach_delete_restore_and_create_with_real_opentofu(
 
     def run_to_end(operation_id):  # noqa: ANN001, ANN202
         runner.run_once()
-        if service.get(operation_id).state == OperationState.AWAITING_APPROVAL:
-            service.approve(operation_id, "sam")
+        waiting_operation = service.get(operation_id)
+        if waiting_operation.state == OperationState.AWAITING_APPROVAL:
+            # The approver types the identifier the review asks for, as a person would.
+            service.approve(operation_id, "sam", confirmation_text=waiting_operation.approval_required_text)
             runner.run_once()
         return service.get(operation_id)
 
